@@ -1,5 +1,3 @@
-package client;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,41 +15,41 @@ public class Client {
 
     public Client(){}
 
-    public void startConnection(String ip, int port){
-        try{
+    public void startConnection(String ip, int port) {
+        try{ 
             socket = new Socket(ip, port);
             System.out.println("Connected !");
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        }catch(UnknownHostException e){
+        } catch(UnknownHostException e) {
 			e.printStackTrace();
-        }catch(IOException e){
+        } catch(IOException e) {
 			e.printStackTrace();
         }
     }
 
-    public String sendMessage(String msg){
-        try{
+    public String sendMessage(String msg) {
+        try {
             out.println(msg);
             String response = in.readLine();
             return response;
-        }catch(IOException e){
+        } catch(IOException e) {
 			e.printStackTrace();
         }
         return "";
     }
 
-    public void stopConnection(){
-        try{
+    public void stopConnection() {
+        try {
             in.close();
             out.close();
             socket.close();
-        }catch(IOException e){
+        } catch(IOException e) {
 			e.printStackTrace();
         }
     }
 
-    public BufferedReader getBufferedReader(){
+    public BufferedReader getBufferedReader() {
         return this.in;
     }
 }
