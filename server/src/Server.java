@@ -44,11 +44,13 @@ public class Server extends ServerSocket {
                 socket = this.accept();
 
                 try {
-                    RequestHandler requestHandler = new RequestHandler(socket, this.nbClient);
+                    GameHandler gameHandler = new GameHandler(socket, this.nbClient);
+                    // RequestHandler requestHandler = new RequestHandler(socket, this.nbClient);
                     
                     LOGGER.info("New connection made with client n°" + this.nbClient++);
 
-                    requestHandler.start();
+                    gameHandler.start();
+                    // requestHandler.start();
                 } catch (IOException re) {
                     LOGGER.severe("An error has occured when creating a request handler : ");
                     re.printStackTrace();
