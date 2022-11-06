@@ -28,15 +28,8 @@ public class Client {
         }
     }
 
-    public String sendMessage(String msg) {
-        try {
-            out.println(msg);
-            String response = in.readLine();
-            return response;
-        } catch(IOException e) {
-			e.printStackTrace();
-        }
-        return "";
+    public void sendMessage(String msg) {
+        out.println(msg);
     }
 
     public void stopConnection() {
