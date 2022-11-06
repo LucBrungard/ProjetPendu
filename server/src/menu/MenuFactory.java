@@ -5,7 +5,7 @@ public final class MenuFactory {
 
     private static Menu StartMenu;
     private static Menu ParametersMenu;
-    private static Menu DiffilcutyMenu;
+    private static Menu DifficultyMenu;
 
     public static Menu getStartMenu() {
         if (StartMenu == null) {
@@ -36,17 +36,17 @@ public final class MenuFactory {
     }
 
     private static Menu getDifficultyMenu() {
-        if (DiffilcutyMenu == null) {
+        if (DifficultyMenu == null) {
             Option easy = new Option(1, "Facile");
             Option normal = new Option(2, "Normal");
             Option hard = new Option(3, "Difficile");
             Option back = new Option(4, "Retour");
 
-            DiffilcutyMenu = new Menu(MenuName.DIFFICULTY_MENU, new Option[]{ easy, normal, hard, back });
+            DifficultyMenu = new Menu(MenuName.DIFFICULTY_MENU, new Option[]{ easy, normal, hard, back });
 
             back.addPrevious(getParametersMenu());
         }
 
-        return DiffilcutyMenu;
+        return DifficultyMenu;
     }
 }
