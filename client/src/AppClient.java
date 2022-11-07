@@ -10,7 +10,7 @@ public class AppClient {
             BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
 
             System.out.println("Entrez l'adresse IP du serveur : ");
-            String ip = "192.168.1.31";
+            String ip = "127.0.0.1";
 			// String ip = keyboard.readLine();
             System.out.println("Entrez le port du serveur : ");
             String port = "6666";
@@ -18,20 +18,65 @@ public class AppClient {
 
             client.startConnection(ip, Integer.parseInt(port));
 
-            boolean keep = true;
-
+            String response;
             while (true) {
-                String response;
-                do {
-                    response = client.getBufferedReader().readLine();
-                    System.out.println(response);
-                    if (response.endsWith("...")) System.exit(0);
-                } while (!response.endsWith("?"));
-    
-                String choice = keyboard.readLine();
-                client.sendMessage(choice);
-                System.out.println();
+                menu:
+                while (true) {
+                    // Handle 1 menu
+                    do {
+                        response = client.getBufferedReader().readLine();
+                        System.out.println(response);
+                        if (response.endsWith("...")) System.exit(0);
+                        else if (response.endsWith("Commençons !")) break menu;
+                    } while (!response.endsWith("?"));
+
+                    // Send choice for 1 menu
+                    String choice = keyboard.readLine();
+                    client.sendMessage(choice);
+                    System.out.println();
+                }
+
+                gamephase:
+                while (true) {
+                    // Handle 1 game phase
+                    do {
+                        response = client.getBufferedReader().readLine();
+                        System.out.println(response);
+                        if (response.endsWith("Fini !")) break gamephase;
+                    } while (!response.endsWith(":"));
+
+                    // Send choice for 1 gamephase
+                    String choice = keyboard.readLine();
+                    client.sendMessage(choice);
+                    System.out.println();
+                }
             }
+
+            // menu:
+            // while (true) {
+            //     do {
+            //         response = client.getBufferedReader().readLine();
+            //         System.out.println(response);
+            //         if (response.endsWith("...")) System.exit(0);
+
+            //         if (response.endsWith("Votre proposition :")) break menu;
+            //     } while (!response.endsWith("?"));
+    
+            //     String choice = keyboard.readLine();
+            //     client.sendMessage(choice);
+            //     System.out.println();
+            // }
+            
+            // while (true) {
+            //     String choice = keyboard.readLine();
+            //     client.sendMessage(choice);
+            //     System.out.println();
+
+            //     do {
+            //         response = client.getBufferedReader().readLine();
+            //         System.out.println(response);
+            //     } while (!response.toString().endsWith("Votre proposition :"));
+            // }
 
             // do {
             //     System.out.println("Veuillez écrire un message");
