@@ -6,6 +6,7 @@ public final class MenuFactory {
     private static Menu StartMenu;
     private static Menu ParametersMenu;
     private static Menu DifficultyMenu;
+    private static Menu EndMenu;
 
     public static Menu getStartMenu() {
         if (StartMenu == null) {
@@ -48,5 +49,19 @@ public final class MenuFactory {
         }
 
         return DifficultyMenu;
+    }
+
+    public static Menu getEndMenu() {
+        if (EndMenu == null) {
+            Option startMenu = new Option(1, "Retourner au menu principal");
+            Option replay = new Option(2, "Rejouer");
+            Option quit = new Option(3, "Quitter");
+
+            EndMenu = new Menu(MenuName.END_MENU, new Option[]{ startMenu, replay, quit });
+
+            startMenu.addNext(StartMenu);
+        }
+
+        return EndMenu;
     }
 }

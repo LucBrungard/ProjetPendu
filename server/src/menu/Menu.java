@@ -3,8 +3,10 @@ package menu;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 
 import game.Game;
+import game.GameState;
 import game.settings.Difficulty;
 
 public class Menu {
@@ -18,23 +20,32 @@ public class Menu {
         this.options = options;
     }
 
-    public void showMenu(BufferedReader inStream, PrintStream outStream, Game game) {
-        boolean isValid = true;
-        do {
-            this.showOptions(outStream, game);
+    public Menu showMenu(BufferedReader inStream, PrintStream outStream, Game game) {
+        game.setState(GameState.IN_MENU_PROGRESS);
 
-            try {
-                String choice = inStream.readLine();
-                if (choice == null) return;
+        this.showOptions(outStream, game);
 
-                isValid = this.handleChoice(choice, inStream, outStream, game);
-                if (!isValid) {
-                    outStream.println("Le choix proposé n'est pas correct");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } while (!isValid);
+        try {
+            String choice = inStream.readLine();
+            if (choice == null) {
+                game.setState(GameState.STOP);
+                return null;
+            };
+
+            return this.handleChoice(choice, inStream, outStream, game);
+            // if (gameState.equals(GameState.IN_MENU_ERROR)) {
+            //     outStream.println("Le choix proposé n'est pas correct");
+            // }
+        } catch (IOException e) {
+            game.setState(GameState.STOP);
+            return null;
+        }
+            
+        // do {
+            
+        // } while (gameState.equals(GameState.IN_MENU_PROGRESS) || gameState.equals(GameState.IN_MENU_ERROR));
+        
+        // return gameState;
     }
 
     private void showOptions(PrintStream outStream, Game game) {
@@ -51,39 +62,69 @@ public class Menu {
         outStream.println("Que choisissez vous ?");
     }
 
-    private boolean handleChoice(String choice, BufferedReader inStream, PrintStream outStream, Game game) {
+    private Menu handleChoice(String choice, BufferedReader inStream, PrintStream outStream, Game game) {
         try {
             int choiceInt = Integer.parseInt(choice);
             for (Option option : options) {
                 if (option.isValid(choiceInt, inStream, outStream, game)) {
                     if (option.getNext() != null) { // Recursive case next
-                        option.getNext().showMenu(inStream, outStream, game);
+                        return option.getNext();
+                        // option.getNext().showMenu(inStream, outStream, game);
                     } else if (option.getPrevious() != null) { // Recursive case previous
-                        option.getPrevious().showMenu(inStream, outStream, game);
-                    } else { // Leaf of menu
-                        // Special case "quit"
-                        if (option.getOption().equalsIgnoreCase("quitter")) {
-                            outStream.println("Aurevoir...");
-                        }
-
-                        // Special case difficulty
-                        if (this.name.equals(MenuName.DIFFICULTY_MENU)) {
+                        return option.getPrevious();
+                        // option.getPrevious().showMenu(inStream, outStream, game);
+                    } else { // Leafs
+                        if (this.name.equals(MenuName.DIFFICULTY_MENU)) { // Special case difficulty
                             game.setDifficulty(Difficulty.fromString(option.getOption()));
                             outStream.println("La difficulté a bien été modifiée");
-                            this.showMenu(inStream, outStream, game);
+                            return this;
+                            // this.showMenu(inStream, outStream, game);
                         }
 
-                        // Special case "Play"
-                        // TODO
-                    }
+                        if (this.name.equals(MenuName.START_MENU)) {
+                            // Special case "Play"
+                            if (option.getOption().equalsIgnoreCase("Commencer une nouvelle partie")) {
+                                // this.startGame(inStream, outStream, game);
+                                // return GameState.IN_GAME;
+                                game.setState(GameState.IN_GAME);
+                                return null;
+                            }
+    
+                            // Special case "quit"
+                            if (option.getOption().equalsIgnoreCase("quitter")) {
+                                // outStream.println("Aurevoir...");
+                                // return GameState.STOP;
+                                game.setState(GameState.STOP);
+                                return null;
+                            }
+                        }
 
-                    return true;
+                        if (this.name.equals(MenuName.END_MENU)) {
+                            if (option.getOption().equalsIgnoreCase("rejouer")) {
+                                game.setState(GameState.IN_GAME);
+                                return null;
+                            }
+
+                            // Special case "quit"
+                            if (option.getOption().equalsIgnoreCase("quitter")) {
+                                // outStream.println("Aurevoir...");
+                                // return GameState.STOP;
+                                game.setState(GameState.STOP);
+                                return null;
+                            }
+                        }
+                    }
                 }
             }
-            return false;
+            return this;
 
         } catch (NumberFormatException e) {
-            return false;
+            return this;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Menu [name=" + name + ", options=" + Arrays.toString(options) + "]";
     }
 }
