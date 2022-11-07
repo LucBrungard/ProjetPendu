@@ -9,13 +9,13 @@ public class WordsDictionnary {
 
     private static final List<String> words = new ArrayList<String>() {{
         add("abeille");
-        add("bélier");
+        add("belier");
         add("courir");
         add("duplicata");
         add("estampille");
         add("fournir");
         add("gesticuler");
-        add("hélice");
+        add("helice");
     }};
 
     public static String getRandomWord() {
