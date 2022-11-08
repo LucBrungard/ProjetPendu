@@ -10,13 +10,13 @@ public class Game {
     private Difficulty difficulty = Difficulty.NORMAL;
     private String toFind;
     private String currentStateWord = "";
-    private int maxErrors;
+    //private int maxErrors;
     private int errors = 0;
     private GameState gameState;
     private Set<String> alreadyProposed = new HashSet<String>();
 
     public Game() {
-        this.setMaxErrors(difficulty);
+        //this.setMaxErrors(difficulty);
     }
 
     public void start() {
@@ -24,12 +24,13 @@ public class Game {
         this.currentStateWord = "";
         this.gameState = GameState.IN_GAME;
         this.alreadyProposed.clear();
-        this.toFind = WordsDictionnary.getRandomWord();
+        this.toFind = WordsDictionnary.getRandomWord(this.difficulty);
         for (int i = 0; i < toFind.length(); i++) {
             currentStateWord = currentStateWord.concat("_ ");
         }
     }
 
+    /*
     private void setMaxErrors(Difficulty difficulty) {
         if (difficulty.equals(Difficulty.EASY)) {
             this.maxErrors = 15;
@@ -41,6 +42,7 @@ public class Game {
             this.maxErrors = 5;
         }
     }
+    */
 
     public boolean guessLetter(char character) {
         String charAsString = Character.toString(Character.toLowerCase(character));
@@ -82,7 +84,7 @@ public class Game {
     }
 
     public boolean hasLost() {
-        return this.errors == this.maxErrors;
+        return this.errors == this.difficulty.maxErrors;
     }
 
     public boolean guessWordToFind(String word) {
@@ -102,7 +104,7 @@ public class Game {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
-        this.setMaxErrors(difficulty);
+        //this.setMaxErrors(difficulty);
     }
 
     public int getErrors() {
@@ -110,7 +112,7 @@ public class Game {
     }
 
     public int getMaxErrors() {
-        return this.maxErrors;
+        return this.difficulty.maxErrors;
     }
 
     public String getToFind() {
@@ -120,7 +122,7 @@ public class Game {
     @Override
     public String toString() {
         return "Game [difficulty=" + difficulty + ", toFind=" + toFind + ", currentStateWord=" + currentStateWord
-                + ", maxErrors=" + maxErrors + ", errors=" + errors + ", gameState=" + gameState + ", alreadyProposed="
+                + ", maxErrors=" + difficulty.maxErrors + ", errors=" + errors + ", gameState=" + gameState + ", alreadyProposed="
                 + alreadyProposed + "]";
     }
 }

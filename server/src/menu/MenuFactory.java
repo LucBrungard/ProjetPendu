@@ -38,12 +38,15 @@ public final class MenuFactory {
 
     private static Menu getDifficultyMenu() {
         if (DifficultyMenu == null) {
-            Option easy = new Option(1, "Facile");
-            Option normal = new Option(2, "Normal");
-            Option hard = new Option(3, "Difficile");
-            Option back = new Option(4, "Retour");
+            Option beginner = new Option(1, "Debutant");
+            Option easy = new Option(2, "Facile");
+            Option amateur = new Option(3, "Amateur");
+            Option normal = new Option(4, "Normal");
+            Option hard = new Option(5, "Difficile");
+            Option hardcore = new Option(6, "Hardcore");
+            Option back = new Option(7, "Retour");
 
-            DifficultyMenu = new Menu(MenuName.DIFFICULTY_MENU, new Option[]{ easy, normal, hard, back });
+            DifficultyMenu = new Menu(MenuName.DIFFICULTY_MENU, new Option[]{ beginner, easy, amateur, normal, hard, hardcore, back });
 
             back.addPrevious(getParametersMenu());
         }
