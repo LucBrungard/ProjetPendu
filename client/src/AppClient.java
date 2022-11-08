@@ -10,11 +10,12 @@ public class AppClient {
             BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
 
             System.out.println("Entrez l'adresse IP du serveur : ");
-            String ip = "127.0.0.1";
-			// String ip = keyboard.readLine();
+            //String ip = "127.0.0.1";
+			 String ip = keyboard.readLine();
             System.out.println("Entrez le port du serveur : ");
             String port = "6666";
 			// String port = keyboard.readLine();
+            System.out.println("En cours de connexion");
 
             client.startConnection(ip, Integer.parseInt(port));
 
@@ -32,6 +33,7 @@ public class AppClient {
 
                     // Send choice for 1 menu
                     String choice = keyboard.readLine();
+                    System.out.println(Client.checkInputGame(choice));
                     client.sendMessage(choice);
                     System.out.println();
                 }
@@ -47,8 +49,20 @@ public class AppClient {
 
                     // Send choice for 1 gamephase
                     String choice = keyboard.readLine();
-                    client.sendMessage(choice);
-                    System.out.println();
+
+                    switch(Client.checkInputGame(choice)){
+                        case 0 :
+                            client.sendMessage(choice);
+                            System.out.println();
+                            break;
+                        case 1 :
+                            System.out.println("Veuillez reformuler sans aucun chiffre.");
+                            break;
+                        case 2 :
+                            System.out.println("Veuillez reformuler sans aucun caractère spécial.");
+
+                    }
+
                 }
             }
 

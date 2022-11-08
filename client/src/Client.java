@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.regex.Pattern;
 
 public class Client {
     private Socket socket;
@@ -11,7 +12,7 @@ public class Client {
     private BufferedReader in;
 
     public static String ip = "127.0.0.1";
-    public static int port = 6666;
+    public static String port = "6666";
 
     public Client(){}
 
@@ -40,6 +41,16 @@ public class Client {
         } catch(IOException e) {
 			e.printStackTrace();
         }
+    }
+
+    public static int checkInputGame(String character){
+        if(Pattern.matches("[a-zA-Z]+", character)){
+            return 0;
+        }
+        if(Pattern.matches(".*[0-9].*", character)){
+            return 1;
+        }
+        return 2;
     }
 
     public BufferedReader getBufferedReader() {
