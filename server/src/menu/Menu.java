@@ -20,35 +20,9 @@ public class Menu {
         this.options = options;
     }
 
-    public Menu showMenu(BufferedReader inStream, PrintStream outStream, Game game) {
+    public void showMenu(BufferedReader inStream, PrintStream outStream, Game game) {
         game.setState(GameState.IN_MENU_PROGRESS);
 
-        this.showOptions(outStream, game);
-
-        try {
-            String choice = inStream.readLine();
-            if (choice == null) {
-                game.setState(GameState.STOP);
-                return null;
-            };
-
-            return this.handleChoice(choice, inStream, outStream, game);
-            // if (gameState.equals(GameState.IN_MENU_ERROR)) {
-            //     outStream.println("Le choix proposé n'est pas correct");
-            // }
-        } catch (IOException e) {
-            game.setState(GameState.STOP);
-            return null;
-        }
-            
-        // do {
-            
-        // } while (gameState.equals(GameState.IN_MENU_PROGRESS) || gameState.equals(GameState.IN_MENU_ERROR));
-        
-        // return gameState;
-    }
-
-    private void showOptions(PrintStream outStream, Game game) {
         for (Option option : options) {
             outStream.print(option);
 
@@ -62,7 +36,7 @@ public class Menu {
         outStream.println("Que choisissez vous ?");
     }
 
-    private Menu handleChoice(String choice, BufferedReader inStream, PrintStream outStream, Game game) {
+    public Menu handleChoice(String choice, BufferedReader inStream, PrintStream outStream, Game game) {
         try {
             int choiceInt = Integer.parseInt(choice);
             for (Option option : options) {
@@ -116,11 +90,19 @@ public class Menu {
                     }
                 }
             }
+
+            // No options has been validated
+            game.setState(GameState.IN_MENU_ERROR);
+
             return this;
 
         } catch (NumberFormatException e) {
             return this;
         }
+    }
+
+    public MenuName getName() {
+        return this.name;
     }
 
     @Override

@@ -5,10 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Enumeration;
-import java.util.logging.Logger;
 
 public class Server extends ServerSocket {
-    private final static Logger LOGGER = Logger.getLogger("server");
     private int nbClient = 0;
     private boolean state = false; 
 
@@ -28,9 +26,9 @@ public class Server extends ServerSocket {
                 System.out.println(i.getHostAddress());
             }
         }
-        System.out.println("=============================");
+        System.out.println("=============================\n");
 
-        LOGGER.info("Server is ready at : " + this.getLocalSocketAddress());
+        System.out.println("Le serveur est prêt au port : " + this.getLocalSocketAddress());
     }
 
     public void start() {
@@ -38,7 +36,7 @@ public class Server extends ServerSocket {
         Socket socket;
 
         while(state) {
-            System.out.println("waiting for a new client...");
+            System.out.println("En attente d'un nouveau client...");
 
             try {
                 socket = this.accept();
@@ -47,18 +45,18 @@ public class Server extends ServerSocket {
                     GameHandler gameHandler = new GameHandler(socket, this.nbClient);
                     // RequestHandler requestHandler = new RequestHandler(socket, this.nbClient);
                     
-                    LOGGER.info("New connection made with client n°" + this.nbClient++);
+                    System.out.println("Nouvelle connexion réussi avec le client n°" + this.nbClient++);
 
                     gameHandler.start();
                     // requestHandler.start();
                 } catch (IOException re) {
-                    LOGGER.severe("An error has occured when creating a request handler : ");
+                    System.err.println("Une erreur est survenue lors de la création d'un nouveau client : ");
                     re.printStackTrace();
                 } 
             } catch (SocketTimeoutException e) {
                 // Nothing to do
             } catch (IOException e) {
-                LOGGER.severe("An error as occured when waiting for a client");
+                System.err.println("Une erreur est survenue lors de l'attente du client");
                 e.printStackTrace();   
             }
         }
@@ -67,5 +65,4 @@ public class Server extends ServerSocket {
     public void stop() {
         this.state = false;
     }
-    
 }
