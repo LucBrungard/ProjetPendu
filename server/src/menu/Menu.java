@@ -1,7 +1,6 @@
 package menu;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
 
