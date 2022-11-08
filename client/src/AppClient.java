@@ -51,6 +51,7 @@ public class AppClient {
                     String choice = keyboard.readLine();
 
                     switch(Client.checkInputGame(choice)){
+                        case -1 :
                         case 0 :
                             client.sendMessage(choice);
                             System.out.println();
