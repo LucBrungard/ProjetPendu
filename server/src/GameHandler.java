@@ -61,10 +61,7 @@ public class GameHandler extends Thread {
                 this.closeGame();
                 return;
             }
-    
-            this.outStream.println("Commençons !");
-            this.showMessage("Début de la partie");
-                
+                  
             startGame(inStream, outStream, game);
 
             if (game.getState().equals(GameState.STOP)) {
@@ -107,6 +104,10 @@ public class GameHandler extends Thread {
     }
 
     private void startGame(BufferedReader inStream, PrintStream outStream, Game game) {
+        this.outStream.println("Commençons !");
+        this.outStream.println("Vous pourrez abandonner à tout moment en tapant : " + Game.getForfeitCommand());
+        this.showMessage("Début de la partie");
+
         game.start();
         this.showMessage(game.toString());
 
@@ -123,6 +124,11 @@ public class GameHandler extends Thread {
                 this.showMessage("Le choix est : " + response);
                 if (response == null) {
                     this.connectionInterrupted(game);
+                    return;
+                }
+
+                if (response.equalsIgnoreCase(Game.getForfeitCommand())) {
+                    game.setState(GameState.LOST);
                     return;
                 }
                 

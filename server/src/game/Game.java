@@ -10,14 +10,11 @@ public class Game {
     private Difficulty difficulty = Difficulty.NORMAL;
     private String toFind;
     private String currentStateWord = "";
-    //private int maxErrors;
     private int errors = 0;
     private GameState gameState;
     private Set<String> alreadyProposed = new HashSet<String>();
 
-    public Game() {
-        //this.setMaxErrors(difficulty);
-    }
+    public Game() {}
 
     public void start() {
         this.errors = 0;
@@ -30,19 +27,9 @@ public class Game {
         }
     }
 
-    /*
-    private void setMaxErrors(Difficulty difficulty) {
-        if (difficulty.equals(Difficulty.EASY)) {
-            this.maxErrors = 15;
-        }
-        else if (difficulty.equals(Difficulty.NORMAL)) {
-            this.maxErrors = 10;
-        }
-        else if (difficulty.equals(Difficulty.HARD)) {
-            this.maxErrors = 5;
-        }
+    public static String getForfeitCommand() {
+        return "/ff";
     }
-    */
 
     public boolean validLetter(char character) {
         String charAsString = Character.toString(Character.toLowerCase(character));
