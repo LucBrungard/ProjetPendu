@@ -51,22 +51,17 @@ public class Menu {
                             game.setDifficulty(Difficulty.fromString(option.getOption()));
                             outStream.println("La difficulté a bien été modifiée");
                             return this;
-                            // this.showMenu(inStream, outStream, game);
                         }
 
                         if (this.name.equals(MenuName.START_MENU)) {
                             // Special case "Play"
                             if (option.getOption().equalsIgnoreCase("Commencer une nouvelle partie")) {
-                                // this.startGame(inStream, outStream, game);
-                                // return GameState.IN_GAME;
                                 game.setState(GameState.IN_GAME);
                                 return null;
                             }
     
                             // Special case "quit"
                             if (option.getOption().equalsIgnoreCase("quitter")) {
-                                // outStream.println("Aurevoir...");
-                                // return GameState.STOP;
                                 game.setState(GameState.STOP);
                                 return null;
                             }
@@ -80,8 +75,6 @@ public class Menu {
 
                             // Special case "quit"
                             if (option.getOption().equalsIgnoreCase("quitter")) {
-                                // outStream.println("Aurevoir...");
-                                // return GameState.STOP;
                                 game.setState(GameState.STOP);
                                 return null;
                             }
@@ -106,6 +99,6 @@ public class Menu {
 
     @Override
     public String toString() {
-        return "Menu [name=" + name + ", options=" + Arrays.toString(options) + "]";
+        return name + ", options=" + Arrays.toString(options);
     }
 }

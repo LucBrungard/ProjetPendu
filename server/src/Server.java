@@ -43,12 +43,10 @@ public class Server extends ServerSocket {
 
                 try {
                     GameHandler gameHandler = new GameHandler(socket, this.nbClient);
-                    // RequestHandler requestHandler = new RequestHandler(socket, this.nbClient);
                     
                     System.out.println("Nouvelle connexion réussi avec le client n°" + this.nbClient++);
 
                     gameHandler.start();
-                    // requestHandler.start();
                 } catch (IOException re) {
                     System.err.println("Une erreur est survenue lors de la création d'un nouveau client : ");
                     re.printStackTrace();

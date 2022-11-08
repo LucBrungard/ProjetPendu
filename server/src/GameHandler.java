@@ -27,60 +27,62 @@ public class GameHandler extends Thread {
         this.outStream.println("Bienvenue dans le jeu du pendu !");
        
         Game game = new Game();
-
         Menu currentMenu = MenuFactory.getStartMenu();
-
         do {
+            // Loop on menus whilenot on a leaf
             do {
-                this.showMessage("Affichage du menu " + currentMenu.getName());
+                this.debugMessage("Affichage du menu " + currentMenu);
                 currentMenu.showMenu(this.inStream, this.outStream, game);
                 
                 // Handle response
                 try {
-
                     // Get response from client
                     String choice = this.inStream.readLine();
-                    if (choice == null) this.connectionInterrupted(game);
-                    this.showMessage("message reçu : " + choice);
+                    this.debugMessage("message reçu : " + choice);
+                    if (choice == null) {
+                        this.connectionInterrupted();
+                        return;
+                    }
 
-                    // Let the menu handle it
+                    // Let the menu handle the choice
                     currentMenu = currentMenu.handleChoice(choice, inStream, outStream, game);
 
+                    // If the client has chosen an invalid option
                     if (game.getState().equals(GameState.IN_MENU_ERROR)) {
-                        this.showMessage("Le choix n'est pas valide");
+                        this.debugMessage("Le choix n'est pas valide");
                         this.outStream.println("Le choix n'est pas valide");
                     }
                 } catch (IOException e) {
-                    this.connectionInterrupted(game);
+                    this.connectionInterrupted();
                     e.printStackTrace();
+                    return;
                 }
             } while (currentMenu != null);
     
+            // If the client has chosen the quit option
             if (game.getState().equals(GameState.STOP)) {
-                this.showMessage("Le client a quitté le serveur...");
+                this.debugMessage("Le client a quitté le serveur...");
+                this.outStream.println("Aurevoir...");
                 this.closeGame();
                 return;
             }
-    
-            this.outStream.println("Commençons !");
-            this.showMessage("Début de la partie");
-                
+                  
             startGame(inStream, outStream, game);
 
             if (game.getState().equals(GameState.STOP)) {
-                this.closeGame();
+                this.connectionInterrupted();
                 return;
             }
     
             this.outStream.println("Fini !");
-            this.showMessage("Fin de la partie");
+            this.debugMessage("Fin de la partie");
 
             if (game.getState().equals(GameState.WON)) {
                 this.outStream.println("Bravo, vous avez gagné !");
-                this.showMessage("Le client a gagné");
+                this.debugMessage("Le client a gagné");
             } else if (game.getState().equals(GameState.LOST)) {
                 this.outStream.println("Dommage, vous avez perdu !");
-                this.showMessage("Le client a perdu");
+                this.debugMessage("Le client a perdu");
             }
 
             this.outStream.println("Le mot à trouver était : " + game.getToFind());
@@ -88,27 +90,14 @@ public class GameHandler extends Thread {
             currentMenu = MenuFactory.getEndMenu();
         } while (!game.getState().equals(GameState.STOP));
     }
-
-    private void connectionInterrupted(Game game) {
-        game.setState(GameState.STOP);
-        this.showMessage("La connexion a été interrompue");
-    }
-
-    private void closeGame() {
-        this.outStream.println("Aurevoir...");
-
-        try {
-            this.inStream.close();
-            this.outStream.close();
-            this.socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+ 
     private void startGame(BufferedReader inStream, PrintStream outStream, Game game) {
+        this.outStream.println("Commençons !");
+        this.outStream.println("Vous pourrez abandonner à tout moment en tapant : " + Game.getForfeitCommand());
+        this.debugMessage("Début de la partie");
+
         game.start();
-        this.showMessage(game.toString());
+        this.debugMessage(game.toString());
 
         String response;
         while (!game.hasBeenFound() && !game.hasLost()) {
@@ -120,9 +109,15 @@ public class GameHandler extends Thread {
 
             try {
                 response = inStream.readLine();
-                this.showMessage("Le choix est : " + response);
+                this.debugMessage("Le choix est : " + response);
+
                 if (response == null) {
-                    this.connectionInterrupted(game);
+                    game.setState(GameState.STOP);
+                    return;
+                }
+
+                if (response.equalsIgnoreCase(Game.getForfeitCommand())) {
+                    game.setState(GameState.LOST);
                     return;
                 }
                 
@@ -131,7 +126,7 @@ public class GameHandler extends Thread {
                     if (game.validLetter(tmp)) {
                         game.guessLetter(tmp);
                     } else {
-                        this.showMessage("La lettre a déjà été proposée");
+                        this.debugMessage("La lettre a déjà été proposée");
                         this.outStream.println("La lettre a déjà été proposée");
                     }
                 } else {
@@ -141,10 +136,10 @@ public class GameHandler extends Thread {
                     };
                 }
 
-                this.showMessage(game.toString());
+                this.debugMessage(game.toString());
             } catch (IOException e) {
                 game.setState(GameState.STOP);
-                this.showMessage("Une erreur est survenue lors de la lecture de la réponse");
+                this.debugMessage("Une erreur est survenue lors de la lecture de la réponse");
                 e.printStackTrace();
                 return;
             }
@@ -157,8 +152,23 @@ public class GameHandler extends Thread {
         }
     }
 
-    private void showMessage(String message) {
-        System.out.println("[client " + this.clientNumber + "] : " + message);
+    private void connectionInterrupted() {
+        this.debugMessage("La connexion a été interrompue");
+        this.closeGame();
     }
 
+    private void closeGame() {
+        try {
+            this.inStream.close();
+            this.outStream.close();
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+
+    private void debugMessage(String message) {
+        System.out.println("[client " + this.clientNumber + "] : " + message);
+    }
 }

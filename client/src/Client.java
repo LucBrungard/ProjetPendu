@@ -44,6 +44,7 @@ public class Client {
     }
 
     public static int checkInputGame(String character){
+        if (character.equals("/ff")) return -1;
         if(Pattern.matches("[a-zA-Z]+", character)){
             return 0;
         }
