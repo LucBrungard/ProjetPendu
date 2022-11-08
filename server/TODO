@@ -1,0 +1,6 @@
+- [x] server : message erreur pour menu
+- [x] client : vérifier les input + message d'erreurs
+- [] server : gérer l'abandon d'un client dans une partie -> "/ff"
+- [] server : la difficulté d'une partie doit se faire en fonction du mot et du nb d'erreurs
+- [x] serveur : gérer affichage logs
+- [x] serveur : si la lettre a été proposée, ne pas la prendre en compte

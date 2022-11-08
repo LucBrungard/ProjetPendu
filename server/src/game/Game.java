@@ -44,25 +44,28 @@ public class Game {
     }
     */
 
-    public boolean guessLetter(char character) {
+    public boolean validLetter(char character) {
         String charAsString = Character.toString(Character.toLowerCase(character));
-        this.alreadyProposed.add(charAsString);
+        return this.alreadyProposed.add(charAsString);
+    }
+
+    public void guessLetter(char character) {
+        String charAsString = Character.toString(Character.toLowerCase(character));
+
         int idx = this.toFind.indexOf(charAsString);
         StringBuilder tmp = new StringBuilder(this.currentStateWord);
 
-        if (idx != -1) {
-            do {
-                tmp.replace(2*idx, 2*idx + 1, charAsString);
-                idx = this.toFind.indexOf(charAsString, idx + 1);
-            } while (idx != -1);
-
-            this.currentStateWord = tmp.toString();
-
-            return true;
+        if (idx == -1) {
+            this.errors += 1;
+            return;
         }
 
-        this.errors += 1;
-        return false;
+        do {
+            tmp.replace(2*idx, 2*idx + 1, charAsString);
+            idx = this.toFind.indexOf(charAsString, idx + 1);
+        } while (idx != -1);
+
+        this.currentStateWord = tmp.toString();
     }
 
     public void setState(GameState gameState) {
