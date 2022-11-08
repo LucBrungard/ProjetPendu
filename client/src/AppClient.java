@@ -60,6 +60,7 @@ public class AppClient {
                             break;
                         case 2 :
                             System.out.println("Veuillez reformuler sans aucun caractère spécial.");
+                            break;
 
                     }
 
