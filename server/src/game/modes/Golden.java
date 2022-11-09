@@ -22,10 +22,10 @@ public class Golden extends Game {
         StringBuilder tmp = new StringBuilder(this.currentStateWord);
         for (String str : voyelle.split("")) {
             idx = this.toFind.indexOf(str);
-            do {
+            while (idx != -1) {
                 tmp.replace(2*idx, 2*idx + 1, str);
                 idx = this.toFind.indexOf(str, idx + 1);
-            } while (idx != -1);
+            }
         }
 
         this.currentStateWord = tmp.toString();
