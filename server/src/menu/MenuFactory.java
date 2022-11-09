@@ -1,5 +1,7 @@
 package menu;
 
+import game.settings.Difficulty;
+
 public final class MenuFactory {
     private MenuFactory() {};
 
@@ -38,12 +40,12 @@ public final class MenuFactory {
 
     private static Menu getDifficultyMenu() {
         if (DifficultyMenu == null) {
-            Option beginner = new Option(1, "Debutant");
-            Option easy = new Option(2, "Facile");
-            Option amateur = new Option(3, "Amateur");
-            Option normal = new Option(4, "Normal");
-            Option hard = new Option(5, "Difficile");
-            Option hardcore = new Option(6, "Hardcore");
+            Option beginner = new Option(1, Difficulty.BEGINNER.toString());
+            Option easy = new Option(2, Difficulty.EASY.toString());
+            Option amateur = new Option(3, Difficulty.AMATEUR.toString());
+            Option normal = new Option(4, Difficulty.NORMAL.toString());
+            Option hard = new Option(5, Difficulty.HARD.toString());
+            Option hardcore = new Option(6, Difficulty.HARDCORE.toString());
             Option back = new Option(7, "Retour");
 
             DifficultyMenu = new Menu(MenuName.DIFFICULTY_MENU, new Option[]{ beginner, easy, amateur, normal, hard, hardcore, back });
