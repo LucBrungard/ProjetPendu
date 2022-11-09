@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Enumeration;
 
+import game.GameHandler;
+
 public class Server extends ServerSocket {
     private int nbClient = 0;
     private boolean state = false; 
