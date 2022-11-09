@@ -2,7 +2,6 @@ package menu;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;
-import java.util.Arrays;
 
 import game.Game;
 import game.GameState;
@@ -99,6 +98,12 @@ public class Menu {
 
     @Override
     public String toString() {
-        return name + ", options=" + Arrays.toString(options);
+        String str = "Menu [name=" + name + ", options=[";
+        for (Option option : this.options) {
+            str = str.concat("\n\t" + option.toString());
+        }
+        str = str.concat("]");
+
+        return str;
     }
 }
