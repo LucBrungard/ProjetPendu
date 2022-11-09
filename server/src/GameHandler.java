@@ -31,7 +31,7 @@ public class GameHandler extends Thread {
         do {
             // Loop on menus whilenot on a leaf
             do {
-                this.showMessage("Affichage du menu " + currentMenu.toString());
+                this.debugMessage("Affichage du menu " + currentMenu.toString());
                 currentMenu.showMenu(this.inStream, this.outStream, game);
                 
                 // Handle response
