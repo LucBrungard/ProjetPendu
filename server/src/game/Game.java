@@ -27,10 +27,6 @@ public class Game {
         }
     }
 
-    public static String getForfeitCommand() {
-        return "/ff";
-    }
-
     public boolean validLetter(char character) {
         String charAsString = Character.toString(Character.toLowerCase(character));
         return this.alreadyProposed.add(charAsString);
@@ -55,20 +51,6 @@ public class Game {
         this.currentStateWord = tmp.toString();
     }
 
-    public void setState(GameState gameState) {
-        if (gameState != null) {
-            this.gameState = gameState;
-        }
-    }
-
-    public GameState getState() {
-        return this.gameState;
-    }
-
-    public Set<String> getAlreadyProposed() {
-        return this.alreadyProposed;
-    }
-
     public boolean hasBeenFound() {
         return this.currentStateWord.replaceAll(" ", "").equals(this.toFind);
     }
@@ -84,6 +66,17 @@ public class Game {
         return res;
     }
 
+    ////////////////////////////////////////////////////////////////////
+    //////////////////             GETTERS             /////////////////
+    ////////////////////////////////////////////////////////////////////
+    public GameState getState() {
+        return this.gameState;
+    }
+
+    public Set<String> getAlreadyProposed() {
+        return this.alreadyProposed;
+    }
+
     public String getCurrentStateWord() {
         return this.currentStateWord;
     }
@@ -92,21 +85,33 @@ public class Game {
         return this.difficulty;
     }
 
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
-        //this.setMaxErrors(difficulty);
+    public static String getForfeitCommand() {
+        return "/ff";
     }
 
     public int getErrors() {
         return this.errors;
     }
-
+    
     public int getMaxErrors() {
         return this.difficulty.maxErrors;
     }
-
+    
     public String getToFind() {
         return this.toFind;
+    }
+    
+    ////////////////////////////////////////////////////////////////////
+    //////////////////             SETTERS             /////////////////
+    ////////////////////////////////////////////////////////////////////
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public void setState(GameState gameState) {
+        if (gameState != null) {
+            this.gameState = gameState;
+        }
     }
 
     @Override
