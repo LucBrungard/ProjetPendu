@@ -1,10 +1,5 @@
 package menu;
 
-import java.io.BufferedReader;
-import java.io.PrintStream;
-
-import game.Game;
-
 public class Option {
     private int index;
     private String question;
@@ -16,7 +11,7 @@ public class Option {
         this.question = question;
     }
 
-    public boolean isValid(int choice, BufferedReader inStream, PrintStream outStream, Game game) {
+    public boolean isValid(int choice) {
         return this.index == choice;
     }
 

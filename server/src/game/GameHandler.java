@@ -1,11 +1,11 @@
+package game;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-import game.Game;
-import game.GameState;
 import menu.MenuFactory;
 import menu.Menu;
 
@@ -14,6 +14,10 @@ public class GameHandler extends Thread {
     protected PrintStream outStream;
     protected int clientNumber;
     protected Socket socket;
+
+    protected ClientState clientState = ClientState.IN_MENU_PROGRESS;
+    protected GameSetting settings = new GameSetting();
+    Game game;
 
     public GameHandler(Socket socket, int clientNumber) throws IOException {
         this.inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -26,50 +30,23 @@ public class GameHandler extends Thread {
     public void run() {
         this.outStream.println("Bienvenue dans le jeu du pendu !");
        
-        Game game = new Game();
         Menu currentMenu = MenuFactory.getStartMenu();
         do {
-            // Loop on menus whilenot on a leaf
-            do {
-                this.debugMessage("Affichage du menu " + currentMenu.toString());
-                currentMenu.showMenu(this.inStream, this.outStream, game);
-                
-                // Handle response
-                try {
-                    // Get response from client
-                    String choice = this.inStream.readLine();
-                    this.debugMessage("message reçu : " + choice);
-                    if (choice == null) {
-                        this.connectionInterrupted();
-                        return;
-                    }
+            this.loopOnMenu(currentMenu);
 
-                    // Let the menu handle the choice
-                    currentMenu = currentMenu.handleChoice(choice, inStream, outStream, game);
-
-                    // If the client has chosen an invalid option
-                    if (game.getState().equals(GameState.IN_MENU_ERROR)) {
-                        this.debugMessage("Le choix n'est pas valide");
-                        this.outStream.println("Le choix n'est pas valide");
-                    }
-                } catch (IOException e) {
-                    this.connectionInterrupted();
-                    e.printStackTrace();
-                    return;
-                }
-            } while (currentMenu != null);
-    
-            // If the client has chosen the quit option
-            if (game.getState().equals(GameState.STOP)) {
+            if (this.clientState.equals(ClientState.DISCONNECTED)) {
+                this.connectionInterrupted();
+                return;
+            } else if ( this.clientState.equals(ClientState.QUIT)) {
                 this.debugMessage("Le client a quitté le serveur...");
                 this.outStream.println("Aurevoir...");
                 this.closeGame();
                 return;
             }
                   
-            startGame(inStream, outStream, game);
+            startGame();
 
-            if (game.getState().equals(GameState.STOP)) {
+            if (this.game.getState().equals(GameState.STOPPED)) {
                 this.connectionInterrupted();
                 return;
             }
@@ -77,30 +54,64 @@ public class GameHandler extends Thread {
             this.outStream.println("Fini !");
             this.debugMessage("Fin de la partie");
 
-            if (game.getState().equals(GameState.WON)) {
+            if (this.game.getState().equals(GameState.WON)) {
                 this.outStream.println("Bravo, vous avez gagné !");
                 this.debugMessage("Le client a gagné");
-            } else if (game.getState().equals(GameState.LOST)) {
+            } else if (this.game.getState().equals(GameState.LOST)) {
                 this.outStream.println("Dommage, vous avez perdu !");
                 this.debugMessage("Le client a perdu");
             }
 
             this.outStream.println("Le mot à trouver était : " + game.getToFind());
     
+            this.clientState = ClientState.IN_MENU_PROGRESS;
             currentMenu = MenuFactory.getEndMenu();
-        } while (!game.getState().equals(GameState.STOP));
+        } while (!this.clientState.equals(ClientState.QUIT));
+    }
+
+    private void loopOnMenu(Menu currentMenu) {
+        // Loop on menus whilenot on a leaf
+        do {
+            this.debugMessage("Affichage du menu " + currentMenu.toString());
+            currentMenu.showMenu(this.inStream, this.outStream, this.settings);
+            
+            // Handle response
+            try {
+                // Get response from client
+                String choice = this.inStream.readLine();
+                this.debugMessage("message reçu : " + choice);
+                if (choice == null) {
+                    this.clientState = ClientState.DISCONNECTED;
+                    return;
+                }
+
+                // Let the menu handle the choice
+                currentMenu = currentMenu.handleChoice(choice, this);
+                System.out.println("OUt : " + this.game);
+
+                // If the client has chosen an invalid option
+                if (clientState.equals(ClientState.IN_MENU_ERROR)) {
+                    this.debugMessage("Le choix n'est pas valide");
+                    this.outStream.println("Le choix n'est pas valide");
+                }
+            } catch (IOException e) {
+                this.clientState = ClientState.DISCONNECTED;
+                e.printStackTrace();
+                return;
+            }
+        } while (currentMenu != null);
     }
  
-    private void startGame(BufferedReader inStream, PrintStream outStream, Game game) {
+    private void startGame() {
         this.outStream.println("Commençons !");
         this.outStream.println("Vous pourrez abandonner à tout moment en tapant : " + Game.getForfeitCommand());
         this.debugMessage("Début de la partie");
 
-        game.start();
+        this.game.start();
         this.debugMessage(game.toString());
 
         String response;
-        while (!game.hasBeenFound() && !game.hasLost()) {
+        while (this.game.getState().equals(GameState.RUNNING)) {
             outStream.println("Etat du mot : " + game.getCurrentStateWord());
             outStream.println("Erreurs : " + game.getErrors() + "/" + game.getMaxErrors());
             outStream.print("Lettres proposées : ");
@@ -112,16 +123,12 @@ public class GameHandler extends Thread {
                 this.debugMessage("Le choix est : " + response);
 
                 if (response == null) {
-                    game.setState(GameState.STOP);
+                    game.setState(GameState.STOPPED);
                     return;
-                }
-
-                if (response.equalsIgnoreCase(Game.getForfeitCommand())) {
+                } else if (response.equalsIgnoreCase(Game.getForfeitCommand())) {
                     game.setState(GameState.LOST);
                     return;
-                }
-                
-                if (response.length() == 1) {
+                } else if (response.length() == 1) {
                     char tmp = response.charAt(0);
                     if (game.validLetter(tmp)) {
                         game.guessLetter(tmp);
@@ -130,25 +137,17 @@ public class GameHandler extends Thread {
                         this.outStream.println("La lettre a déjà été proposée");
                     }
                 } else {
-                    if (game.guessWordToFind(response)) {
-                        game.setState(GameState.WON);
-                        return;
-                    };
+                    game.guessWordToFind(response);
+                    System.out.println(game.getState());
                 }
 
                 this.debugMessage(game.toString());
             } catch (IOException e) {
-                game.setState(GameState.STOP);
+                this.game.setState(GameState.STOPPED);
                 this.debugMessage("Une erreur est survenue lors de la lecture de la réponse");
                 e.printStackTrace();
                 return;
             }
-        }
-
-        if (game.hasBeenFound()) {
-            game.setState(GameState.WON);
-        } else {
-            game.setState(GameState.LOST);
         }
     }
 
@@ -170,5 +169,21 @@ public class GameHandler extends Thread {
 
     private void debugMessage(String message) {
         System.out.println("[client " + this.clientNumber + "] : " + message);
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public GameSetting getSettings() {
+        return this.settings;
+    }
+
+    public PrintStream getOutStream() {
+        return this.outStream;
+    }
+
+    public void setClientState(ClientState state) {
+        this.clientState = state;
     }
 }

@@ -9,19 +9,35 @@ public final class MenuFactory {
     private static Menu ParametersMenu;
     private static Menu DifficultyMenu;
     private static Menu EndMenu;
+    private static Menu GameModesMenu;
 
     public static Menu getStartMenu() {
         if (StartMenu == null) {
-            Option start = new Option(1, "Commencer une nouvelle partie");
+            Option start = new Option(1, "Jouer");
             Option parameters = new Option(2, "Paramètres");
             Option quit = new Option(3, "Quitter");
 
             StartMenu = new Menu(MenuName.START_MENU, new Option[]{ start, parameters, quit });
             
+            start.addNext(getGameModesMenu());
             parameters.addNext(getParametersMenu());
         }
 
         return StartMenu;
+    }
+
+    private static Menu getGameModesMenu() {
+        if (GameModesMenu == null) {
+            Option classic = new Option(1, "Classique");
+            Option golden = new Option(2, "Essai en or");
+            Option back = new Option(3, "Retour");
+
+            GameModesMenu = new Menu(MenuName.GAMES_MODE_MENU, new Option[]{ classic, golden, back });
+
+            back.addNext(getStartMenu());
+        }
+
+        return GameModesMenu;
     }
 
     private static Menu getParametersMenu() {
