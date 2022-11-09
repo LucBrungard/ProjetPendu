@@ -107,6 +107,7 @@ public abstract class Game {
         } else {
             this.gameState = GameState.WON;
         }
+        if (this.hasLost()) this.gameState = GameState.LOST;
     }
 
 
