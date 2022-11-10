@@ -1,6 +1,7 @@
 package game.settings;
 
 import java.util.List;
+import game.GameUtil;
 
 public enum Difficulty {
     BEGINNER("debutant", 15, WordsDictionnary.words7To15Letters, 
@@ -37,6 +38,6 @@ public enum Difficulty {
 
     @Override
     public String toString() {
-        return this.value.substring(0, 1).toUpperCase() + this.value.substring(1) + " (" + this.description + ")";
+        return GameUtil.captitalize(this.value) + " (" + this.description + ")";
     }
 }

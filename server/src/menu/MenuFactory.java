@@ -1,5 +1,6 @@
 package menu;
 
+import game.GameUtil;
 import game.settings.Difficulty;
 
 public final class MenuFactory {
@@ -10,16 +11,19 @@ public final class MenuFactory {
     private static Menu DifficultyMenu;
     private static Menu EndMenu;
     private static Menu GameModesMenu;
+    private static Menu LeaderBoardMenu;
 
     public static Menu getStartMenu() {
         if (StartMenu == null) {
             Option start = new Option(1, "Jouer");
-            Option parameters = new Option(2, "Paramètres");
-            Option quit = new Option(3, "Quitter");
+            Option leaderboard = new Option(2, "Classement");
+            Option parameters = new Option(3, "Paramètres");
+            Option quit = new Option(4, "Quitter");
 
-            StartMenu = new Menu(MenuName.START_MENU, new Option[]{ start, parameters, quit });
+            StartMenu = new Menu(MenuName.START_MENU, new Option[]{ start, leaderboard, parameters, quit });
             
             start.addNext(getGameModesMenu());
+            leaderboard.addNext(getLeaderBoardMenu());
             parameters.addNext(getParametersMenu());
         }
 
@@ -40,7 +44,7 @@ public final class MenuFactory {
         return GameModesMenu;
     }
 
-    private static Menu getParametersMenu() {
+    static Menu getParametersMenu() {
         if (ParametersMenu == null) {
             Option difficulty = new Option(1, "Difficulté");
             Option back = new Option(2, "Retour");
@@ -48,7 +52,7 @@ public final class MenuFactory {
             ParametersMenu = new Menu(MenuName.PARAMETERS_MENU, new Option[]{ difficulty, back });
             
             difficulty.addNext(getDifficultyMenu());
-            back.addPrevious(getStartMenu());
+            back.addNext(getStartMenu());
         }
 
         return ParametersMenu;
@@ -66,10 +70,28 @@ public final class MenuFactory {
 
             DifficultyMenu = new Menu(MenuName.DIFFICULTY_MENU, new Option[]{ beginner, easy, amateur, normal, hard, hardcore, back });
 
-            back.addPrevious(getParametersMenu());
+            back.addNext(getParametersMenu());
         }
 
         return DifficultyMenu;
+    }
+
+    public static Menu getLeaderBoardMenu() {
+        if (LeaderBoardMenu == null) {
+            Option beginner = new Option(1, GameUtil.captitalize(Difficulty.EASY.value));
+            Option easy = new Option(2, GameUtil.captitalize(Difficulty.EASY.value));
+            Option amateur = new Option(3, GameUtil.captitalize(Difficulty.AMATEUR.value));
+            Option normal = new Option(4, GameUtil.captitalize(Difficulty.NORMAL.value));
+            Option hard = new Option(5, GameUtil.captitalize(Difficulty.HARD.value));
+            Option hardcore = new Option(6, GameUtil.captitalize(Difficulty.HARDCORE.value));
+            Option back = new Option(7, "Retour");
+
+            LeaderBoardMenu = new Menu(MenuName.LEADERBOARD_MENU, new Option[]{ beginner, easy, amateur, normal, hard, hardcore, back });
+
+            back.addNext(getStartMenu());
+        }
+
+        return LeaderBoardMenu;
     }
 
     public static Menu getEndMenu() {

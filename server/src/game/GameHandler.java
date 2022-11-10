@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import game.settings.Difficulty;
 import menu.MenuFactory;
+import scores.ScoresHandler;
 import menu.Menu;
 
 public class GameHandler extends Thread {
@@ -87,7 +89,6 @@ public class GameHandler extends Thread {
 
                 // Let the menu handle the choice
                 currentMenu = currentMenu.handleChoice(choice, this);
-                System.out.println("OUt : " + this.game);
 
                 // If the client has chosen an invalid option
                 if (clientState.equals(ClientState.IN_MENU_ERROR)) {
@@ -165,7 +166,14 @@ public class GameHandler extends Thread {
             e.printStackTrace();
         }
     }
-    
+  
+    public void showLeaderBoard(Difficulty difficulty) {
+        try {
+            this.outStream.println(ScoresHandler.getInstance().getLeaderBoardString(difficulty));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void debugMessage(String message) {
         System.out.println("[client " + this.clientNumber + "] : " + message);

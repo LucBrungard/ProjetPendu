@@ -5,6 +5,7 @@ public enum MenuName {
     GAMES_MODE_MENU("games-mode-menu"),
     PARAMETERS_MENU("parameters-menu"),
     DIFFICULTY_MENU("difficulty-menu"),
+    LEADERBOARD_MENU("leaderboard-menu"),
     END_MENU("end-menu");
 
     public final String name;
