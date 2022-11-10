@@ -15,6 +15,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import game.GameUtil;
 import game.settings.Difficulty;
 
 public class ScoresHandler {
@@ -122,6 +123,20 @@ public class ScoresHandler {
             }
         });
         t.start();
+    }
+
+    public String getLeaderBoardString(Difficulty difficulty) {
+        String res = GameUtil.captitalize(difficulty.value);
+        res = res.concat("\n===============================");
+
+        for (Score score : scores.get(difficulty)) {
+            if (score == null) break;
+            res = res.concat("    " + score.getName() + " : " + score.getScore());
+        }
+
+        res = res.concat("\n===============================\n");
+
+        return res;
     }
 
     public void showScores() {

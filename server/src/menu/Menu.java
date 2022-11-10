@@ -26,7 +26,7 @@ public class Menu {
             outStream.print(option);
 
             if (this.name.equals(MenuName.DIFFICULTY_MENU)) {
-                if (settings.getDifficulty().value.equalsIgnoreCase(option.getOption())) {
+                if (settings.getDifficulty().toString().equalsIgnoreCase(option.getOption())) {
                     outStream.print(" \u2705");
                 }
             }
@@ -43,8 +43,6 @@ public class Menu {
                 if (option.isValid(choiceInt)) {
                     if (option.getNext() != null) { // Recursive case next
                         return option.getNext();
-                    } else if (option.getPrevious() != null) { // Recursive case previous
-                        return option.getPrevious();
                     } else { // Leafs
                         if (this.name.equals(MenuName.DIFFICULTY_MENU)) { // Special case difficulty
                             gameHandler.getSettings().setDifficulty(Difficulty.fromString(option.getOption()));
@@ -76,6 +74,9 @@ public class Menu {
                                 gameHandler.setClientState(ClientState.QUIT);
                                 return null;
                             }
+                        } else if (this.name.equals(MenuName.LEADERBOARD_MENU)) {
+                            gameHandler.showLeaderBoard(Difficulty.fromString(option.getOption()));
+                            return this;
                         }
                     }
                 }
