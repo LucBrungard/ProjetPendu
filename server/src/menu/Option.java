@@ -3,7 +3,6 @@ package menu;
 public class Option {
     private int index;
     private String question;
-    private Menu previous;
     private Menu next;
 
     public Option(int index, String question) {
@@ -13,12 +12,6 @@ public class Option {
 
     public boolean isValid(int choice) {
         return this.index == choice;
-    }
-
-    public void addPrevious(Menu menuOption) {
-        if (menuOption != null) {
-            this.previous = menuOption;
-        }
     }
 
     public void addNext(Menu menuOption) {
@@ -34,10 +27,6 @@ public class Option {
 
     public String getOption() {
         return this.question;
-    }
-
-    public Menu getPrevious() {
-        return this.previous;
     }
 
     public Menu getNext() {
