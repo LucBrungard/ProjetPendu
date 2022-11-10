@@ -26,7 +26,7 @@ public class Menu {
             outStream.print(option);
 
             if (this.name.equals(MenuName.DIFFICULTY_MENU)) {
-                if (settings.getDifficulty().toString().equalsIgnoreCase(option.getOption())) {
+                if (settings.getDifficulty().value.equalsIgnoreCase(option.getOption())) {
                     outStream.print(" \u2705");
                 }
             }
@@ -77,6 +77,22 @@ public class Menu {
                         } else if (this.name.equals(MenuName.LEADERBOARD_MENU)) {
                             gameHandler.showLeaderBoard(Difficulty.fromString(option.getOption()));
                             return this;
+                        } else if (this.name.equals(MenuName.HELP_MENU)) {
+                            if (option.getOption().equalsIgnoreCase("Les difficultés")) {
+                                for (Difficulty difficulty : Difficulty.values()) {
+                                    gameHandler.getOutStream().println(difficulty.toString());
+                                }
+                            }
+                            return this;
+                        } else if (this.name.equals(MenuName.HELP_MODES_MENU)) {
+                            if (option.getOption().equalsIgnoreCase("Classique")) {
+                                gameHandler.getOutStream().println(Classic.getFullDescription());
+                                return this;
+                            }
+                            if (option.getOption().equalsIgnoreCase("Essai en or")) {
+                                gameHandler.getOutStream().println(Golden.getFullDescription());
+                                return this;
+                            }
                         }
                     }
                 }
