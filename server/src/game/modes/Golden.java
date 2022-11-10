@@ -31,12 +31,17 @@ public class Golden extends Game {
         this.currentStateWord = tmp.toString();
     }
 
-    @Override
-    public String getDescription() {
-        String res = "Le mode de jeu Essai en Or est un mode dans lequel toutes les voyelles d'un mot sont révélées.";
-        res = res.concat("\nCependant, vous n'avez qu'un seul essai pour proposer le mot à trouver.");
-        res = res.concat("\nRefléchissez bien avant de jouer !");
+    public static String getFullDescription() {
+        String res = "===================================\n";
+        res = res.concat("========== ESSAI EN OR ============\n");
+        res = res.concat("===================================\n\n");
 
+        res = res.concat("Limite de temps : aucune\n");
+        res = res.concat("Nombre d'essais : 1\n\n");
+
+        res = res.concat("Détails : Le mode de jeu Essai en Or est un mode dans lequel toutes les voyelles d'un mot sont révélées.\n");
+        res = res.concat("Cependant, vous n'avez qu'un seul essai pour proposer le mot à trouver.\n");
+        res = res.concat("Refléchissez bien avant de jouer !\n");
         return res;
     }
 }

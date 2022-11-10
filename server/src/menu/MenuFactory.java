@@ -12,19 +12,23 @@ public final class MenuFactory {
     private static Menu EndMenu;
     private static Menu GameModesMenu;
     private static Menu LeaderBoardMenu;
+    private static Menu HelpMenu;
+    private static Menu HelpModesMenu;
 
     public static Menu getStartMenu() {
         if (StartMenu == null) {
             Option start = new Option(1, "Jouer");
             Option leaderboard = new Option(2, "Classement");
             Option parameters = new Option(3, "Paramètres");
-            Option quit = new Option(4, "Quitter");
+            Option help = new Option(4, "Aide");
+            Option quit = new Option(5, "Quitter");
 
-            StartMenu = new Menu(MenuName.START_MENU, new Option[]{ start, leaderboard, parameters, quit });
+            StartMenu = new Menu(MenuName.START_MENU, new Option[]{ start, leaderboard, parameters, help, quit });
             
             start.addNext(getGameModesMenu());
             leaderboard.addNext(getLeaderBoardMenu());
             parameters.addNext(getParametersMenu());
+            help.addNext(getHelpMenu());
         }
 
         return StartMenu;
@@ -60,12 +64,12 @@ public final class MenuFactory {
 
     private static Menu getDifficultyMenu() {
         if (DifficultyMenu == null) {
-            Option beginner = new Option(1, Difficulty.BEGINNER.toString());
-            Option easy = new Option(2, Difficulty.EASY.toString());
-            Option amateur = new Option(3, Difficulty.AMATEUR.toString());
-            Option normal = new Option(4, Difficulty.NORMAL.toString());
-            Option hard = new Option(5, Difficulty.HARD.toString());
-            Option hardcore = new Option(6, Difficulty.HARDCORE.toString());
+            Option beginner = new Option(1, GameUtil.captitalize(Difficulty.BEGINNER.value));
+            Option easy = new Option(2, GameUtil.captitalize(Difficulty.EASY.value));
+            Option amateur = new Option(3, GameUtil.captitalize(Difficulty.AMATEUR.value));
+            Option normal = new Option(4, GameUtil.captitalize(Difficulty.NORMAL.value));
+            Option hard = new Option(5, GameUtil.captitalize(Difficulty.HARD.value));
+            Option hardcore = new Option(6, GameUtil.captitalize(Difficulty.HARDCORE.value));
             Option back = new Option(7, "Retour");
 
             DifficultyMenu = new Menu(MenuName.DIFFICULTY_MENU, new Option[]{ beginner, easy, amateur, normal, hard, hardcore, back });
@@ -78,7 +82,7 @@ public final class MenuFactory {
 
     public static Menu getLeaderBoardMenu() {
         if (LeaderBoardMenu == null) {
-            Option beginner = new Option(1, GameUtil.captitalize(Difficulty.EASY.value));
+            Option beginner = new Option(1, GameUtil.captitalize(Difficulty.BEGINNER.value));
             Option easy = new Option(2, GameUtil.captitalize(Difficulty.EASY.value));
             Option amateur = new Option(3, GameUtil.captitalize(Difficulty.AMATEUR.value));
             Option normal = new Option(4, GameUtil.captitalize(Difficulty.NORMAL.value));
@@ -92,6 +96,35 @@ public final class MenuFactory {
         }
 
         return LeaderBoardMenu;
+    }
+
+    public static Menu getHelpMenu() {
+        if (HelpMenu == null) {
+            Option modes = new Option(1, "Les modes de jeu");
+            Option difficulties = new Option(2, "Les difficultés");
+            Option back = new Option(3, "Retour");
+
+            HelpMenu = new Menu(MenuName.HELP_MENU, new Option[]{ modes, difficulties, back });
+
+            modes.addNext(getHelpModesMenu());
+            back.addNext(getStartMenu());
+        }
+
+        return HelpMenu;
+    }
+
+    public static Menu getHelpModesMenu() {
+        if (HelpModesMenu == null) {
+            Option classic = new Option(1, "Classique");
+            Option golden = new Option(2, "Essai en or");
+            Option back = new Option(3, "Retour");
+
+            HelpModesMenu = new Menu(MenuName.HELP_MODES_MENU, new Option[]{ classic, golden, back });
+
+            back.addNext(getHelpMenu());
+        }
+
+        return HelpModesMenu;
     }
 
     public static Menu getEndMenu() {

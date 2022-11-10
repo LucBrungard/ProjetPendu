@@ -38,6 +38,6 @@ public enum Difficulty {
 
     @Override
     public String toString() {
-        return GameUtil.captitalize(this.value) + " (" + this.description + ")";
+        return GameUtil.captitalize(this.value) + "\n\t" + this.description;
     }
 }
