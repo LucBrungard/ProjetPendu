@@ -14,18 +14,19 @@ public class Client {
     public static String ip = "127.0.0.1";
     public static String port = "6666";
 
-    public Client(){}
+    public Client() {
+    }
 
     public void startConnection(String ip, int port) {
-        try{ 
+        try {
             socket = new Socket(ip, port);
             System.out.println("Connected !");
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch(UnknownHostException e) {
-			e.printStackTrace();
-        } catch(IOException e) {
-			e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -38,17 +39,18 @@ public class Client {
             in.close();
             out.close();
             socket.close();
-        } catch(IOException e) {
-			e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static int checkInputGame(String character){
-        if (character.equals("/ff")) return -1;
-        if(Pattern.matches("[a-zA-Z]+", character)){
+    public static int checkInputGame(String character) {
+        if (character.equals("/ff"))
+            return 0;
+        if (Pattern.matches("[a-zA-Z]+", character)) {
             return 0;
         }
-        if(Pattern.matches(".*[0-9].*", character)){
+        if (Pattern.matches(".*[0-9].*", character)) {
             return 1;
         }
         return 2;

@@ -4,7 +4,8 @@ import game.GameUtil;
 import game.settings.Difficulty;
 
 public final class MenuFactory {
-    private MenuFactory() {};
+    private MenuFactory() {
+    };
 
     private static Menu StartMenu;
     private static Menu ParametersMenu;
@@ -23,8 +24,8 @@ public final class MenuFactory {
             Option help = new Option(4, "Aide");
             Option quit = new Option(5, "Quitter");
 
-            StartMenu = new Menu(MenuName.START_MENU, new Option[]{ start, leaderboard, parameters, help, quit });
-            
+            StartMenu = new Menu(MenuName.START_MENU, new Option[] { start, leaderboard, parameters, help, quit });
+
             start.addNext(getGameModesMenu());
             leaderboard.addNext(getLeaderBoardMenu());
             parameters.addNext(getParametersMenu());
@@ -40,7 +41,7 @@ public final class MenuFactory {
             Option golden = new Option(2, "Essai en or");
             Option back = new Option(3, "Retour");
 
-            GameModesMenu = new Menu(MenuName.GAMES_MODE_MENU, new Option[]{ classic, golden, back });
+            GameModesMenu = new Menu(MenuName.GAMES_MODE_MENU, new Option[] { classic, golden, back });
 
             back.addNext(getStartMenu());
         }
@@ -52,9 +53,9 @@ public final class MenuFactory {
         if (ParametersMenu == null) {
             Option difficulty = new Option(1, "Difficulté");
             Option back = new Option(2, "Retour");
-            
-            ParametersMenu = new Menu(MenuName.PARAMETERS_MENU, new Option[]{ difficulty, back });
-            
+
+            ParametersMenu = new Menu(MenuName.PARAMETERS_MENU, new Option[] { difficulty, back });
+
             difficulty.addNext(getDifficultyMenu());
             back.addNext(getStartMenu());
         }
@@ -72,7 +73,8 @@ public final class MenuFactory {
             Option hardcore = new Option(6, GameUtil.captitalize(Difficulty.HARDCORE.value));
             Option back = new Option(7, "Retour");
 
-            DifficultyMenu = new Menu(MenuName.DIFFICULTY_MENU, new Option[]{ beginner, easy, amateur, normal, hard, hardcore, back });
+            DifficultyMenu = new Menu(MenuName.DIFFICULTY_MENU,
+                    new Option[] { beginner, easy, amateur, normal, hard, hardcore, back });
 
             back.addNext(getParametersMenu());
         }
@@ -90,7 +92,8 @@ public final class MenuFactory {
             Option hardcore = new Option(6, GameUtil.captitalize(Difficulty.HARDCORE.value));
             Option back = new Option(7, "Retour");
 
-            LeaderBoardMenu = new Menu(MenuName.LEADERBOARD_MENU, new Option[]{ beginner, easy, amateur, normal, hard, hardcore, back });
+            LeaderBoardMenu = new Menu(MenuName.LEADERBOARD_MENU,
+                    new Option[] { beginner, easy, amateur, normal, hard, hardcore, back });
 
             back.addNext(getStartMenu());
         }
@@ -104,7 +107,7 @@ public final class MenuFactory {
             Option difficulties = new Option(2, "Les difficultés");
             Option back = new Option(3, "Retour");
 
-            HelpMenu = new Menu(MenuName.HELP_MENU, new Option[]{ modes, difficulties, back });
+            HelpMenu = new Menu(MenuName.HELP_MENU, new Option[] { modes, difficulties, back });
 
             modes.addNext(getHelpModesMenu());
             back.addNext(getStartMenu());
@@ -119,7 +122,7 @@ public final class MenuFactory {
             Option golden = new Option(2, "Essai en or");
             Option back = new Option(3, "Retour");
 
-            HelpModesMenu = new Menu(MenuName.HELP_MODES_MENU, new Option[]{ classic, golden, back });
+            HelpModesMenu = new Menu(MenuName.HELP_MODES_MENU, new Option[] { classic, golden, back });
 
             back.addNext(getHelpMenu());
         }
@@ -133,7 +136,7 @@ public final class MenuFactory {
             Option replay = new Option(2, "Rejouer");
             Option quit = new Option(3, "Quitter");
 
-            EndMenu = new Menu(MenuName.END_MENU, new Option[]{ startMenu, replay, quit });
+            EndMenu = new Menu(MenuName.END_MENU, new Option[] { startMenu, replay, quit });
 
             startMenu.addNext(StartMenu);
         }
