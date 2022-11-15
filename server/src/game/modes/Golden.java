@@ -11,19 +11,17 @@ public class Golden extends Game {
     private static String voyelle = "aeiouy";
 
     @Override
-    public void guessLetter(char character) {}
-
-    @Override
     public void startSpecialRule() {
         this.maxErrors = 1;
-        
+        this.mode = "golden";
+
         // Show all voyelles
         int idx;
         StringBuilder tmp = new StringBuilder(this.currentStateWord);
         for (String str : voyelle.split("")) {
             idx = this.toFind.indexOf(str);
             while (idx != -1) {
-                tmp.replace(2*idx, 2*idx + 1, str);
+                tmp.replace(2 * idx, 2 * idx + 1, str);
                 idx = this.toFind.indexOf(str, idx + 1);
             }
         }
@@ -39,9 +37,11 @@ public class Golden extends Game {
         res = res.concat("Limite de temps : aucune\n");
         res = res.concat("Nombre d'essais : 1\n\n");
 
-        res = res.concat("Détails : Le mode de jeu Essai en Or est un mode dans lequel toutes les voyelles d'un mot sont révélées.\n");
+        res = res.concat(
+                "Détails : Le mode de jeu Essai en Or est un mode dans lequel toutes les voyelles d'un mot sont révélées.\n");
         res = res.concat("Cependant, vous n'avez qu'un seul essai pour proposer le mot à trouver.\n");
         res = res.concat("Refléchissez bien avant de jouer !\n");
         return res;
     }
+
 }

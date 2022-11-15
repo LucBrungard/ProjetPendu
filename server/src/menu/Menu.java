@@ -7,6 +7,7 @@ import game.ClientState;
 import game.GameSetting;
 import game.modes.Classic;
 import game.modes.Golden;
+import game.modes.PointsRush;
 import game.settings.Difficulty;
 import game.GameHandler;
 
@@ -16,7 +17,8 @@ public class Menu {
 
     public Menu(MenuName name, Option[] options) {
         this.name = name;
-        if (options.length == 0 ) return;
+        if (options.length == 0)
+            return;
 
         this.options = options;
     }
@@ -51,7 +53,8 @@ public class Menu {
                         } else if (this.name.equals(MenuName.START_MENU)) {
                             // Special case "quit"
                             if (option.getOption().equalsIgnoreCase("quitter")) {
-                                gameHandler.setClientState(ClientState.QUIT);;
+                                gameHandler.setClientState(ClientState.QUIT);
+                                ;
                                 return null;
                             }
                         } else if (this.name.equals(MenuName.GAMES_MODE_MENU)) {
@@ -61,6 +64,10 @@ public class Menu {
                             }
                             if (option.getOption().equalsIgnoreCase("Essai en or")) {
                                 gameHandler.setGame(new Golden(gameHandler.getSettings()));
+                                return null;
+                            }
+                            if (option.getOption().equalsIgnoreCase("Ruée aux points")) {
+                                gameHandler.setGame(new PointsRush(gameHandler.getSettings()));
                                 return null;
                             }
                         } else if (this.name.equals(MenuName.END_MENU)) {
@@ -91,6 +98,10 @@ public class Menu {
                             }
                             if (option.getOption().equalsIgnoreCase("Essai en or")) {
                                 gameHandler.getOutStream().println(Golden.getFullDescription());
+                                return this;
+                            }
+                            if (option.getOption().equalsIgnoreCase("Ruée aux points")) {
+                                gameHandler.getOutStream().println(PointsRush.getFullDescription());
                                 return this;
                             }
                         }

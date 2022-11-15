@@ -9,7 +9,9 @@ public class Classic extends Game {
     }
 
     @Override
-    public void startSpecialRule() {}
+    public void startSpecialRule() {
+        this.mode = "classic";
+    }
 
     public static String getFullDescription() {
         String res = "===================================\n";
@@ -23,8 +25,10 @@ public class Classic extends Game {
         res = res.concat("\t- On vous donne un mot\n");
         res = res.concat("\t- Si vous vous êtes trompé dans votre proposition, votre compte d'erreur augmente\n");
         res = res.concat("\t- Lorsque vous arrivez au maximum d'erreurs possibles, vous perdez la partie\n");
-        res = res.concat("\t- Si vous trouvez le mot avant de dépasser le nombre d'erreurs maximales, vous ganez la partie\n");
+        res = res.concat(
+                "\t- Si vous trouvez le mot avant de dépasser le nombre d'erreurs maximales, vous ganez la partie\n");
         res = res.concat("Refléchissez bien avant de jouer !\n");
         return res;
     }
+
 }

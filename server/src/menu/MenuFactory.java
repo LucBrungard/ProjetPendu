@@ -39,9 +39,10 @@ public final class MenuFactory {
         if (GameModesMenu == null) {
             Option classic = new Option(1, "Classique");
             Option golden = new Option(2, "Essai en or");
-            Option back = new Option(3, "Retour");
+            Option rush = new Option(3, "Ruée aux points");
+            Option back = new Option(4, "Retour");
 
-            GameModesMenu = new Menu(MenuName.GAMES_MODE_MENU, new Option[] { classic, golden, back });
+            GameModesMenu = new Menu(MenuName.GAMES_MODE_MENU, new Option[] { classic, golden, rush, back });
 
             back.addNext(getStartMenu());
         }
@@ -120,9 +121,10 @@ public final class MenuFactory {
         if (HelpModesMenu == null) {
             Option classic = new Option(1, "Classique");
             Option golden = new Option(2, "Essai en or");
-            Option back = new Option(3, "Retour");
+            Option rush = new Option(3, "Ruée aux points");
+            Option back = new Option(4, "Retour");
 
-            HelpModesMenu = new Menu(MenuName.HELP_MODES_MENU, new Option[] { classic, golden, back });
+            HelpModesMenu = new Menu(MenuName.HELP_MODES_MENU, new Option[] { classic, golden, rush, back });
 
             back.addNext(getHelpMenu());
         }

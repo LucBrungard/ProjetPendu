@@ -27,11 +27,11 @@ public class GameHandler extends Thread {
         this.socket = socket;
         this.clientNumber = clientNumber;
     }
-    
+
     @Override
     public void run() {
         this.outStream.println("Bienvenue dans le jeu du pendu !");
-       
+
         Menu currentMenu = MenuFactory.getStartMenu();
         do {
             this.loopOnMenu(currentMenu);
@@ -39,20 +39,20 @@ public class GameHandler extends Thread {
             if (this.clientState.equals(ClientState.DISCONNECTED)) {
                 this.connectionInterrupted();
                 return;
-            } else if ( this.clientState.equals(ClientState.QUIT)) {
+            } else if (this.clientState.equals(ClientState.QUIT)) {
                 this.debugMessage("Le client a quitté le serveur...");
                 this.outStream.println("Aurevoir...");
                 this.closeGame();
                 return;
             }
-                  
+
             startGame();
 
             if (this.game.getState().equals(GameState.STOPPED)) {
                 this.connectionInterrupted();
                 return;
             }
-    
+
             this.outStream.println("Fini !");
             this.debugMessage("Fin de la partie");
 
@@ -65,7 +65,11 @@ public class GameHandler extends Thread {
             }
 
             this.outStream.println("Le mot à trouver était : " + game.getToFind());
-    
+
+            if (this.game.getMode().equals("rush")) {
+                displayRush();
+            }
+
             this.clientState = ClientState.IN_MENU_PROGRESS;
             currentMenu = MenuFactory.getEndMenu();
         } while (!this.clientState.equals(ClientState.QUIT));
@@ -76,7 +80,7 @@ public class GameHandler extends Thread {
         do {
             this.debugMessage("Affichage du menu " + currentMenu.toString());
             currentMenu.showMenu(this.inStream, this.outStream, this.settings);
-            
+
             // Handle response
             try {
                 // Get response from client
@@ -102,7 +106,43 @@ public class GameHandler extends Thread {
             }
         } while (currentMenu != null);
     }
- 
+
+    private void displayRush() {
+        this.outStream.println(this.game.msgSpecialRule());
+        this.outStream.println("Souhaitez-vous enregistrer votre score ? y/n");
+        this.debugMessage("Demande d'enregistrer le score");
+
+        String response = "";
+        while (!response.equals("y") && !response.equals("n")) {
+            try {
+                response = inStream.readLine();
+                this.debugMessage("Le choix est : " + response);
+                if (response == null) {
+                    game.setState(GameState.STOPPED);
+                    return;
+                } else if (response.equals("y")) {
+                    this.outStream.println("Enregistrer sous le nom de : ");
+                    String resp = inStream.readLine();
+                    ScoresHandler.getInstance().addScore(this.game.getDifficulty(), resp, this.game.getScore());
+                    showLeaderBoard(this.game.getDifficulty());
+                } else if (response.equals("n")) {
+                    this.debugMessage("Aucun enregistrement");
+                    return;
+                } else {
+                    this.debugMessage("La réponse est invalide");
+                    this.outStream.println("La réponse est invalide");
+                }
+
+            } catch (IOException e) {
+                this.game.setState(GameState.STOPPED);
+                this.debugMessage("Une erreur est survenue lors de la lecture de la réponse");
+                e.printStackTrace();
+                return;
+            }
+        }
+
+    }
+
     private void startGame() {
         this.outStream.println("Commençons !");
         this.outStream.println("Vous pourrez abandonner à tout moment en tapant : " + Game.getForfeitCommand());
@@ -166,7 +206,7 @@ public class GameHandler extends Thread {
             e.printStackTrace();
         }
     }
-  
+
     public void showLeaderBoard(Difficulty difficulty) {
         try {
             this.outStream.println(ScoresHandler.getInstance().getLeaderBoardString(difficulty));

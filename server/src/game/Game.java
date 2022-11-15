@@ -3,6 +3,7 @@ package game;
 import java.util.HashSet;
 import java.util.Set;
 
+import game.settings.Difficulty;
 import game.settings.WordsDictionnary;
 
 public abstract class Game {
@@ -27,11 +28,14 @@ public abstract class Game {
     /** The settings of a game */
     protected GameSetting settings;
 
+    /** The mode of a game */
+    protected String mode = "normal";
+
     public Game(GameSetting settings) {
-        if (settings != null) this.settings = settings;
+        if (settings != null)
+            this.settings = settings;
     }
 
-    
     /**
      * Initialize the variables to start a new game
      */
@@ -52,13 +56,17 @@ public abstract class Game {
         this.startSpecialRule();
     }
 
-
     /** Add special cases when playing modes */
     public abstract void startSpecialRule();
 
+    /** Add special msg when playing modes */
+    public String msgSpecialRule() {
+        return "";
+    }
 
     /**
      * Check if a letter has already been proposed
+     * 
      * @param character The letter to check
      * @return True if not already proposed, false otherwise
      */
@@ -67,9 +75,9 @@ public abstract class Game {
         return this.alreadyProposed.add(charAsString);
     }
 
-
     /**
      * Check if a letter is in the word to find and update the currentStateWord
+     * 
      * @param character The letter to check
      */
     public void guessLetter(char character) {
@@ -80,23 +88,25 @@ public abstract class Game {
 
         if (idx == -1) {
             this.errors += 1;
-            if (this.hasLost()) this.gameState = GameState.LOST;
+            if (this.hasLost())
+                this.gameState = GameState.LOST;
             return;
         }
 
         do {
-            tmp.replace(2*idx, 2*idx + 1, charAsString);
+            tmp.replace(2 * idx, 2 * idx + 1, charAsString);
             idx = this.toFind.indexOf(charAsString, idx + 1);
         } while (idx != -1);
 
         this.currentStateWord = tmp.toString();
 
-        if (this.hasBeenFound()) this.gameState = GameState.WON;
+        if (this.hasBeenFound())
+            this.gameState = GameState.WON;
     }
-
 
     /**
      * Check if the word to find is the word proposed
+     * 
      * @param word The word to check
      * @return True if the word is good, false otherwise
      */
@@ -107,29 +117,30 @@ public abstract class Game {
         } else {
             this.gameState = GameState.WON;
         }
-        if (this.hasLost()) this.gameState = GameState.LOST;
+        if (this.hasLost())
+            this.gameState = GameState.LOST;
     }
-
 
     /**
      * Check if the word has been found
+     * 
      * @return True if it has been found, false otherwise
      */
-    private boolean hasBeenFound() {
+    protected boolean hasBeenFound() {
         return this.currentStateWord.replaceAll(" ", "").equals(this.toFind);
     }
 
-    
     /**
      * Check if the game is lost
+     * 
      * @return True if the game is lost, false otherwise
      */
-    private boolean hasLost() {
+    protected boolean hasLost() {
         return this.errors == this.maxErrors;
     }
 
     ////////////////////////////////////////////////////////////////////
-    //////////////////             GETTERS             /////////////////
+    ////////////////// GETTERS /////////////////
     ////////////////////////////////////////////////////////////////////
     public GameState getState() {
         return this.gameState;
@@ -150,17 +161,29 @@ public abstract class Game {
     public int getErrors() {
         return this.errors;
     }
-    
+
     public int getMaxErrors() {
         return this.maxErrors;
     }
-    
+
     public String getToFind() {
         return this.toFind;
     }
 
+    public String getMode() {
+        return this.mode;
+    }
+
+    public Difficulty getDifficulty() {
+        return this.settings.getDifficulty();
+    }
+
+    public int getScore() {
+        return 0;
+    }
+
     ////////////////////////////////////////////////////////////////////
-    //////////////////             SETTERS             /////////////////
+    ////////////////// SETTERS /////////////////
     ////////////////////////////////////////////////////////////////////
     public void setState(GameState gameState) {
         if (gameState != null) {
@@ -171,7 +194,6 @@ public abstract class Game {
     public void setMaxErrors(int value) {
         this.maxErrors = value;
     }
-
 
     @Override
     public String toString() {

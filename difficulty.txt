@@ -1,3 +1,15 @@
+PTS :
+se fait selon nb de lettres du mot  
+Coup 1 = 10*nbLettres trouvées
+Coup 2 = 9*nbLettres trouvées
+Coup 3 = 8*nbLettres trouvées
+--> (11-coup)*nbLettres trouvées 
+
+Mot trouvé = (10pts * (11-NumCoup))
+
+Chaque coup manqué = -10*nbErreurs 
+Perdu = -50
+
 DEBUTANT
 15e
 7-15l 
