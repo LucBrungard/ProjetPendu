@@ -109,20 +109,22 @@ public class GameHandler extends Thread {
 
     private void displayRush() {
         this.outStream.println(this.game.msgSpecialRule());
-        this.outStream.println("Souhaitez-vous enregistrer votre score ? y/n");
+        this.outStream.println("Souhaitez-vous enregistrer votre score ? y/n ?");
         this.debugMessage("Demande d'enregistrer le score");
 
         String response = "";
-        while (!response.equals("y") && !response.equals("n")) {
+        do {
             try {
                 response = inStream.readLine();
+
                 this.debugMessage("Le choix est : " + response);
                 if (response == null) {
                     game.setState(GameState.STOPPED);
                     return;
                 } else if (response.equals("y")) {
-                    this.outStream.println("Enregistrer sous le nom de : ");
+                    this.outStream.println("Enregistrer sous le nom de ?");
                     String resp = inStream.readLine();
+
                     ScoresHandler.getInstance().addScore(this.game.getDifficulty(), resp, this.game.getScore());
                     showLeaderBoard(this.game.getDifficulty());
                 } else if (response.equals("n")) {
@@ -132,14 +134,11 @@ public class GameHandler extends Thread {
                     this.debugMessage("La réponse est invalide");
                     this.outStream.println("La réponse est invalide");
                 }
-
             } catch (IOException e) {
-                this.game.setState(GameState.STOPPED);
-                this.debugMessage("Une erreur est survenue lors de la lecture de la réponse");
                 e.printStackTrace();
-                return;
             }
-        }
+
+        } while (!response.equals("y") && !response.equals("n"));
 
     }
 
