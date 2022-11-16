@@ -3,120 +3,123 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class AppClient {
-    public static void main(String[] args) throws Exception {
-        try {
-            Client client = new Client();
+   public static void main(String[] args) throws Exception {
+      try {
+         Client client = new Client();
 
-            BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+         BufferedReader keyboard = new BufferedReader(
+               new InputStreamReader(System.in));
 
-            System.out.println("Entrez l'adresse IP du serveur : ");
-            // String ip = "127.0.0.1";
-            String ip = keyboard.readLine();
-            System.out.println("Entrez le port du serveur : ");
-            String port = "6666";
-            // String port = keyboard.readLine();
-            System.out.println("En cours de connexion");
+         System.out.println("Entrez l'adresse IP du serveur : ");
+         // String ip = "127.0.0.1";
+         String ip = keyboard.readLine();
+         System.out.println("Entrez le port du serveur : ");
+         String port = "6666";
+         // String port = keyboard.readLine();
+         System.out.println("En cours de connexion");
 
-            client.startConnection(ip, Integer.parseInt(port));
+         client.startConnection(ip, Integer.parseInt(port));
 
-            String response;
-            while (true) {
-                menu: while (true) {
-                    // Handle 1 menu
-                    do {
-                        response = client.getBufferedReader().readLine();
-                        System.out.println(response);
-                        if (response.endsWith("..."))
-                            System.exit(0);
-                        else if (response.endsWith("Commençons !"))
-                            break menu;
-                    } while (!response.endsWith("?"));
+         String response;
+         while (true) {
+            menu: while (true) {
+               // Handle 1 menu
+               do {
+                  response = client.getBufferedReader().readLine();
+                  System.out.println(response);
+                  if (response.endsWith("..."))
+                     System.exit(0);
+                  else if (response.endsWith("Commençons !"))
+                     break menu;
+               } while (!response.endsWith("?"));
 
-                    // Send choice for 1 menu
-                    String choice = keyboard.readLine();
-                    System.out.println(Client.checkInputGame(choice));
-                    client.sendMessage(choice);
-                    System.out.println();
-                }
-
-                gamephase: while (true) {
-                    // Handle 1 game phase
-                    do {
-                        response = client.getBufferedReader().readLine();
-                        System.out.println(response);
-                        if (response.endsWith("Fini !"))
-                            break gamephase;
-                    } while (!response.endsWith(":"));
-
-                    // Send choice for 1 gamephase
-                    String choice = "";
-
-                    while (Client.checkInputGame(choice) != 0) {
-                        choice = keyboard.readLine();
-
-                        switch (Client.checkInputGame(choice)) {
-                            case 0:
-                                client.sendMessage(choice);
-                                System.out.println();
-                                break;
-                            case 1:
-                                System.out.println("Veuillez reformuler sans aucun chiffre.");
-                                break;
-                            case 2:
-                                System.out.println("Veuillez reformuler sans aucun caractère spécial.");
-                                break;
-
-                        }
-                    }
-
-                }
+               // Send choice for 1 menu
+               String choice = keyboard.readLine();
+               System.out.println(Client.checkInputGame(choice));
+               client.sendMessage(choice);
+               System.out.println();
             }
 
-            // menu:
-            // while (true) {
-            // do {
-            // response = client.getBufferedReader().readLine();
-            // System.out.println(response);
-            // if (response.endsWith("...")) System.exit(0);
+            gamephase: while (true) {
+               // Handle 1 game phase
+               do {
+                  response = client.getBufferedReader().readLine();
+                  System.out.println(response);
+                  if (response.endsWith("Fini !"))
+                     break gamephase;
+               } while (!response.endsWith(":"));
 
-            // if (response.endsWith("Votre proposition :")) break menu;
-            // } while (!response.endsWith("?"));
+               // Send choice for 1 gamephase
+               String choice = "";
 
-            // String choice = keyboard.readLine();
-            // client.sendMessage(choice);
-            // System.out.println();
-            // }
+               while (Client.checkInputGame(choice) != 0) {
+                  choice = keyboard.readLine();
 
-            // while (true) {
-            // String choice = keyboard.readLine();
-            // client.sendMessage(choice);
-            // System.out.println();
+                  switch (Client.checkInputGame(choice)) {
+                     case 0:
+                        client.sendMessage(choice);
+                        System.out.println();
+                        break;
+                     case 1:
+                        System.out.println(
+                              "Veuillez reformuler sans aucun chiffre.");
+                        break;
+                     case 2:
+                        System.out.println(
+                              "Veuillez reformuler sans aucun caractère spécial.");
+                        break;
 
-            // do {
-            // response = client.getBufferedReader().readLine();
-            // System.out.println(response);
-            // } while (!response.toString().endsWith("Votre proposition :"));
-            // }
+                  }
+               }
 
-            // do {
-            // System.out.println("Veuillez écrire un message");
-            // String choix = keyboard.readLine();
-            // if(choix == ""){
-            // keep = false;
-            // }else{
-            // String response = client.sendMessage(choix);
-            // System.out.println("response : " + response);
-            // if (response == null) {
-            // keep = false;
-            // }
-            // }
-            // } while(keep);
+            }
+         }
 
-            // client.stopConnection();
-            // System.out.println("Disconnected !");
+         // menu:
+         // while (true) {
+         // do {
+         // response = client.getBufferedReader().readLine();
+         // System.out.println(response);
+         // if (response.endsWith("...")) System.exit(0);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+         // if (response.endsWith("Votre proposition :")) break menu;
+         // } while (!response.endsWith("?"));
+
+         // String choice = keyboard.readLine();
+         // client.sendMessage(choice);
+         // System.out.println();
+         // }
+
+         // while (true) {
+         // String choice = keyboard.readLine();
+         // client.sendMessage(choice);
+         // System.out.println();
+
+         // do {
+         // response = client.getBufferedReader().readLine();
+         // System.out.println(response);
+         // } while (!response.toString().endsWith("Votre proposition :"));
+         // }
+
+         // do {
+         // System.out.println("Veuillez écrire un message");
+         // String choix = keyboard.readLine();
+         // if(choix == ""){
+         // keep = false;
+         // }else{
+         // String response = client.sendMessage(choix);
+         // System.out.println("response : " + response);
+         // if (response == null) {
+         // keep = false;
+         // }
+         // }
+         // } while(keep);
+
+         // client.stopConnection();
+         // System.out.println("Disconnected !");
+
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+   }
 }
