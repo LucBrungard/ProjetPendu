@@ -45,6 +45,8 @@ public abstract class Game {
       this.errors = 0;
       this.maxErrors = this.settings.getDifficulty().maxErrors;
 
+      this.helpInvoked = false;
+
       this.toFind = WordsDictionnary
             .getRandomWord(this.settings.getDifficulty());
       this.currentStateWord = "";
@@ -158,8 +160,8 @@ public abstract class Game {
          }
       }
 
-      temp.replaceAll("_", "");
-
+      temp = temp.replaceAll("_", "");
+      System.out.println(temp);
       int size = temp.length() - 1;
       int idx = new Random().nextInt(size);
 
