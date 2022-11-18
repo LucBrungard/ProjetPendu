@@ -153,7 +153,7 @@ public abstract class Game {
       this.helpInvoked = true;
       String temp = "";
       for (int i = 0; i < this.toFind.length(); i++) {
-         if (this.currentStateWord.charAt(i) == (this.toFind.charAt(i))) {
+         if (this.currentStateWord.charAt(2*i) == (this.toFind.charAt(i))) {
             temp += "_";
          } else {
             temp += this.toFind.charAt(i);
@@ -161,12 +161,9 @@ public abstract class Game {
       }
 
       temp = temp.replaceAll("_", "");
-      System.out.println(temp);
-      int size = temp.length() - 1;
-      int idx = new Random().nextInt(size);
+      int idx = new Random().nextInt(temp.length());
 
       return temp.charAt(idx);
-
    }
 
    ////////////////////////////////////////////////////////////////////
