@@ -1,6 +1,7 @@
 package game;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import game.settings.Difficulty;
@@ -30,6 +31,7 @@ public abstract class Game {
 
    /** The mode of a game */
    protected String mode = "normal";
+   protected boolean helpInvoked = false;
 
    public Game(GameSetting settings) {
       if (settings != null)
@@ -69,7 +71,7 @@ public abstract class Game {
     * Check if a letter has already been proposed
     * 
     * @param character
-    *           The letter to check
+    *                  The letter to check
     * @return True if not already proposed, false otherwise
     */
    public boolean validLetter(char character) {
@@ -82,7 +84,7 @@ public abstract class Game {
     * Check if a letter is in the word to find and update the currentStateWord
     * 
     * @param character
-    *           The letter to check
+    *                  The letter to check
     */
    public void guessLetter(char character) {
       String charAsString = Character
@@ -113,7 +115,7 @@ public abstract class Game {
     * Check if the word to find is the word proposed
     * 
     * @param word
-    *           The word to check
+    *             The word to check
     * @return True if the word is good, false otherwise
     */
    public void guessWordToFind(String word) {
@@ -145,6 +147,26 @@ public abstract class Game {
       return this.errors == this.maxErrors;
    }
 
+   public char invokeHelp() {
+      this.helpInvoked = true;
+      String temp = "";
+      for (int i = 0; i < this.toFind.length(); i++) {
+         if (this.currentStateWord.charAt(i) == (this.toFind.charAt(i))) {
+            temp += "_";
+         } else {
+            temp += this.toFind.charAt(i);
+         }
+      }
+
+      temp.replaceAll("_", "");
+
+      int size = temp.length() - 1;
+      int idx = new Random().nextInt(size);
+
+      return temp.charAt(idx);
+
+   }
+
    ////////////////////////////////////////////////////////////////////
    ////////////////// GETTERS /////////////////
    ////////////////////////////////////////////////////////////////////
@@ -162,6 +184,10 @@ public abstract class Game {
 
    public static String getForfeitCommand() {
       return "/ff";
+   }
+
+   public static String getHelpCommand() {
+      return "/help";
    }
 
    public int getErrors() {
@@ -186,6 +212,10 @@ public abstract class Game {
 
    public int getScore() {
       return 0;
+   }
+
+   public boolean isHelpInvoked() {
+      return this.helpInvoked;
    }
 
    ////////////////////////////////////////////////////////////////////

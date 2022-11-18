@@ -14,7 +14,8 @@ public class Client {
    public static String ip = "127.0.0.1";
    public static String port = "6666";
 
-   public Client() {}
+   public Client() {
+   }
 
    public void startConnection(String ip, int port) {
       try {
@@ -46,6 +47,8 @@ public class Client {
 
    public static int checkInputGame(String character) {
       if (character.equals("/ff"))
+         return 0;
+      if (character.equals("/help"))
          return 0;
       if (Pattern.matches("[a-zA-Z]+", character)) {
          return 0;
