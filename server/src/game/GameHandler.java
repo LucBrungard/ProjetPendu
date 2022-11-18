@@ -162,6 +162,8 @@ public class GameHandler extends Thread {
          outStream.print("Lettres proposées : ");
          game.getAlreadyProposed()
                .forEach(proposed -> outStream.print(proposed + ","));
+
+         outStream.println("\n" + this.game.msgSpecialRule());
          outStream.println("\nVotre proposition :");
 
          try {
