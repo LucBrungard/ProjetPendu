@@ -156,13 +156,4 @@ public class ScoresHandler {
 
       return res;
    }
-
-   public void showScores() {
-      scores.forEach((key, value) -> {
-         System.out.println(key.value);
-         for (Score score : value) {
-            System.out.println("    " + score);
-         }
-      });
-   }
 }

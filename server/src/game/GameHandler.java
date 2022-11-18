@@ -196,7 +196,6 @@ public class GameHandler extends Thread {
                }
             } else {
                game.guessWordToFind(response);
-               System.out.println(game.getState());
             }
 
             this.debugMessage(game.toString());
