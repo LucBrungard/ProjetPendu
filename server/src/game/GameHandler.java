@@ -149,6 +149,10 @@ public class GameHandler extends Thread {
       this.outStream
             .println("Vous pourrez abandonner à tout moment en tapant : "
                   + Game.getForfeitCommand());
+      this.outStream
+            .println("Vous pourrez demander de l'aide à tout moment (invocable une seule fois par partie) en tapant : "
+                  + Game.getHelpCommand());
+
       this.debugMessage("Début de la partie");
 
       this.game.start();
@@ -176,6 +180,12 @@ public class GameHandler extends Thread {
             } else if (response.equalsIgnoreCase(Game.getForfeitCommand())) {
                game.setState(GameState.LOST);
                return;
+            } else if (response.equalsIgnoreCase(Game.getHelpCommand())) {
+               if (this.game.isHelpInvoked()) {
+                  outStream.println("Vous avez déjà invoqué la commande d'aide durant cette partie");
+               } else {
+                  outStream.println("Voici un indice : " + this.game.invokeHelp());
+               }
             } else if (response.length() == 1) {
                char tmp = response.charAt(0);
                if (game.validLetter(tmp)) {
