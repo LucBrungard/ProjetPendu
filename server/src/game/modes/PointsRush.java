@@ -7,6 +7,7 @@ import game.GameState;
 public class PointsRush extends Game {
    protected int points;
    protected int coup;
+   private int coefPtsErrors = 5;
 
    public PointsRush(GameSetting settings) {
       super(settings);
@@ -35,7 +36,7 @@ public class PointsRush extends Game {
     * Check if a letter is in the word to find and update the currentStateWord
     * 
     * @param character
-    *           The letter to check
+    *                  The letter to check
     */
    @Override
    public void guessLetter(char character) {
@@ -47,7 +48,7 @@ public class PointsRush extends Game {
 
       if (idx == -1) {
          this.errors += 1;
-         this.points -= (10 * this.errors);
+         this.points -= (this.coefPtsErrors * this.errors);
          if (this.hasLost())
             this.gameState = GameState.LOST;
          this.points -= 50;
@@ -62,21 +63,24 @@ public class PointsRush extends Game {
          nbLettresTrouvees++;
       } while (idx != -1);
 
-      this.points += ((11 - this.coup) * nbLettresTrouvees);
-
       this.currentStateWord = tmp.toString();
+
+      String replaceCurrentWord = currentStateWord.replaceAll("_", "");
+      int nbAllLettersAlreadyFound = replaceCurrentWord.length();
+      this.points += ((11 - this.coup) * nbLettresTrouvees * nbAllLettersAlreadyFound);
 
       if (this.hasBeenFound()) {
          this.points += (10 * (11 - this.coup));
          this.gameState = GameState.WON;
       }
+
    }
 
    /**
     * Check if the word to find is the word proposed
     * 
     * @param word
-    *           The word to check
+    *             The word to check
     * @return True if the word is good, false otherwise
     */
    @Override
@@ -84,7 +88,7 @@ public class PointsRush extends Game {
       boolean res = this.toFind.equalsIgnoreCase(word);
       if (!res) {
          this.errors += 1;
-         this.points -= (10 * this.errors);
+         this.points -= (coefPtsErrors * this.errors);
          this.coup++;
       } else {
          this.gameState = GameState.WON;

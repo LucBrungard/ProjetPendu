@@ -60,11 +60,11 @@ public class ScoresHandler {
     * Insert a score in a list if the value is > to any value in the list
     * 
     * @param scoreList
-    *           The list to insert the value
+    *                   The list to insert the value
     * @param name
-    *           The name of who scored
+    *                   The name of who scored
     * @param scoreValue
-    *           The score value
+    *                   The score value
     */
    private void insertSortDesc(Score[] scoreList, String name, int scoreValue) {
       // Go to the last value being >= scoreValue

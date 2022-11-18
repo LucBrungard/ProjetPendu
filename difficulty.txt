@@ -1,6 +1,6 @@
 PTS :
 se fait selon nb de lettres du mot  
-Coup 1 = 10*nbLettres trouvées
+Coup 1 = 10*nbLettres trouvées*nbLettres déjà trouvées 
 Coup 2 = 9*nbLettres trouvées
 Coup 3 = 8*nbLettres trouvées
 --> (11-coup)*nbLettres trouvées 
