@@ -74,50 +74,6 @@ public class AppClient {
 
             }
          }
-
-         // menu:
-         // while (true) {
-         // do {
-         // response = client.getBufferedReader().readLine();
-         // System.out.println(response);
-         // if (response.endsWith("...")) System.exit(0);
-
-         // if (response.endsWith("Votre proposition :")) break menu;
-         // } while (!response.endsWith("?"));
-
-         // String choice = keyboard.readLine();
-         // client.sendMessage(choice);
-         // System.out.println();
-         // }
-
-         // while (true) {
-         // String choice = keyboard.readLine();
-         // client.sendMessage(choice);
-         // System.out.println();
-
-         // do {
-         // response = client.getBufferedReader().readLine();
-         // System.out.println(response);
-         // } while (!response.toString().endsWith("Votre proposition :"));
-         // }
-
-         // do {
-         // System.out.println("Veuillez écrire un message");
-         // String choix = keyboard.readLine();
-         // if(choix == ""){
-         // keep = false;
-         // }else{
-         // String response = client.sendMessage(choix);
-         // System.out.println("response : " + response);
-         // if (response == null) {
-         // keep = false;
-         // }
-         // }
-         // } while(keep);
-
-         // client.stopConnection();
-         // System.out.println("Disconnected !");
-
       } catch (IOException e) {
          e.printStackTrace();
       }

@@ -114,7 +114,7 @@ public class PointsRush extends Game {
             "Plus vous mettez de temps à trouver des lettres et à trouvez le mot, moins vous gagnerez de points.\n");
       res = res.concat("De plus, les erreurs vous coûtent des points.\n");
       res = res.concat(
-            "En fin de partie, vous pourrez, si vous le souhaitez, enregistrer votre score et pourquoi pas, rejoindre le top du Leaderbord...\n");
+            "En fin de partie, vous pourrez, si vous le souhaitez, enregistrer votre score et pourquoi pas, rejoindre le top du Leaderbord\n");
       res = res.concat("Refléchissez bien avant de jouer !\n");
       return res;
    }

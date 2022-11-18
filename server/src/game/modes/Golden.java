@@ -11,6 +11,9 @@ public class Golden extends Game {
    private static String voyelle = "aeiouy";
 
    @Override
+   public void guessLetter(char character) {}
+
+   @Override
    public void startSpecialRule() {
       this.maxErrors = 1;
       this.mode = "golden";

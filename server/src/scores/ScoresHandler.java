@@ -8,8 +8,10 @@ import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -46,11 +48,13 @@ public class ScoresHandler {
 
          Score[] scoreList = new Score[10];
          scoreForDifficulty.forEach(score -> {
-            JSONObject scoreObject = (JSONObject) score;
-            String name = scoreObject.getString("name");
-            int scoreValue = scoreObject.getInt("score");
+            if (score != null) {
+               JSONObject scoreObject = (JSONObject) score;
+               String name = scoreObject.getString("name");
+               int scoreValue = scoreObject.getInt("score");
 
-            this.insertSortDesc(scoreList, name, scoreValue);
+               this.insertSortDesc(scoreList, name, scoreValue);
+            }
          });
          scores.put(Difficulty.fromString(key), scoreList);
       }
@@ -98,7 +102,13 @@ public class ScoresHandler {
       scores.put(difficulty, scoreList);
 
       // Update the JSON object
-      scoresJSON.put(difficulty.value, scoreList);
+      List<Score> tmpScoreList = new ArrayList<Score>();
+      for (Score tmpScore: scoreList) {
+         if (tmpScore != null) {
+            tmpScoreList.add(tmpScore);
+         }
+      }
+      scoresJSON.put(difficulty.value, tmpScoreList);
 
       // Save to file
       writeScores();
@@ -135,11 +145,11 @@ public class ScoresHandler {
    public String getLeaderBoardString(Difficulty difficulty) {
       String res = GameUtil.captitalize(difficulty.value);
       res = res.concat("\n===============================");
-
+      int pos = 1;
       for (Score score : scores.get(difficulty)) {
          if (score == null)
             break;
-         res = res.concat("    " + score.getName() + " : " + score.getScore());
+         res = res.concat("\n    " + pos++ + ". " + score.getName() + " : " + score.getScore());
       }
 
       res = res.concat("\n===============================\n");
